@@ -1,0 +1,14 @@
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_compact.log:compact      : 5305713.000 micros/op;
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_fillrandom.log:fillrandom   :      22.641 micros/op;   43.8 MB/s
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_fillrandom.log:Comparisons: 44701562
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readmissing.log:readmissing  :       0.580 micros/op;
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readmissing.log:Comparisons: 20383248
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readrandom.log:readrandom   :       1.187 micros/op; (1000000 of 1000000 found)
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readrandom.log:Comparisons: 23865717
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_compact.log:compact      : 5653000.000 micros/op;
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_fillrandom.log:fillrandom   :      21.965 micros/op;   45.2 MB/s
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_fillrandom.log:Comparisons: 44767201
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readmissing.log:readmissing  :       0.976 micros/op;
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readmissing.log:Comparisons: 23868025
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readrandom.log:readrandom   :       1.093 micros/op; (1000000 of 1000000 found)
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readrandom.log:Comparisons: 23863173

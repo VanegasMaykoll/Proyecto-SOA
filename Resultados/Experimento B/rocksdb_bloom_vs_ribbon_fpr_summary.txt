@@ -1,0 +1,19 @@
+====================================================================
+ROCKSDB 8.6.7 — OBSERVED FILTER FALSE-POSITIVE RATE
+====================================================================
+
+Condition: bloom10
+  Useful negatives:       990281
+  Full positives:         9700
+  Full true positives:    0
+  Estimated false pos.:   9700
+  Negative filter probes: 999981
+  Observed FPR:           0.970018%
+
+Condition: ribbon10eq
+  Useful negatives:       990568
+  Full positives:         9416
+  Full true positives:    0
+  Estimated false pos.:   9416
+  Negative filter probes: 999984
+  Observed FPR:           0.941615%

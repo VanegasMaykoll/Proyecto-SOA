@@ -1,0 +1,1319 @@
+============================================================
+SPEEDB 2.8.0 — EXPERIMENTO B
+BLOOM FILTER VS RIBBON FILTER
+Fecha: 2026-07-24T22:32:04-05:00
+============================================================
+
+=== VERSIÓN ===
+Etiqueta: speedb/v2.8.0
+Commit: c328f0ebc33db0166cd2a2844ff44c8034e30e5b
+
+=== CONFIGURACIÓN COMÚN ===
+NUM=1000000
+READS=1000000
+VALUE_SIZE=1024
+THREADS=1
+CACHE_SIZE=33554432 bytes
+WRITE_BUFFER_SIZE=4194304 bytes
+COMPRESSION_TYPE=snappy
+COMPRESSION_RATIO=1.0
+MEMTABLE=skip_list
+ENABLE_SPEEDB_FEATURES=0
+USE_SPDB_WRITES=0
+MEMTABLE_BLOOM_SIZE_RATIO=0
+WHOLE_KEY_FILTERING=1
+SEED=20260724
+HISTOGRAM=1
+STATISTICS=1
+STATS_LEVEL=3
+PERF_LEVEL=2
+
+=== CONDICIONES ===
+Bloom:
+  bloom_bits=10
+  use_ribbon_filter=0
+
+Ribbon:
+  bloom_equivalent_bits=10
+  use_ribbon_filter=1
+
+=== RESULTADOS PRINCIPALES ===
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:compact      : 1910609.000 micros/op 0 ops/sec 1.911 seconds 1 operations; PERF_CONTEXT:
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:fillrandom   :       4.106 micros/op 243539 ops/sec 4.106 seconds 1000000 operations;  241.5 MB/s PERF_CONTEXT:
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:readmissing  :       0.347 micros/op 2884246 ops/sec 0.347 seconds 1000000 operations; (0 of 1000000 found)
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:readrandom   :       2.669 micros/op 374672 ops/sec 2.669 seconds 1000000 operations;  303.2 MB/s (815813 of 1000000 found)
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:compact      : 1828319.000 micros/op 0 ops/sec 1.828 seconds 1 operations; PERF_CONTEXT:
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:fillrandom   :       4.245 micros/op 235590 ops/sec 4.245 seconds 1000000 operations;  233.7 MB/s PERF_CONTEXT:
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:readmissing  :       0.373 micros/op 2681648 ops/sec 0.373 seconds 1000000 operations; (0 of 1000000 found)
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:readrandom   :       2.474 micros/op 404197 ops/sec 2.474 seconds 1000000 operations;  327.1 MB/s (815813 of 1000000 found)
+
+=== CONTADORES DE FILTROS ===
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:user_key_comparison_count = 6, block_cache_hit_count = 0, block_read_count = 0, block_read_byte = 0, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 0, bloom_sst_miss_count = 0, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = bloom_filter_full_positive = bloom_filter_full_true_positive = user_key_return_count = get_from_table_nanos = block_cache_hit_count = block_cache_miss_count =
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.bloom.filter.useful COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.bloom.filter.full.positive COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.bloom.filter.full.true.positive COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.bloom.filter.useful COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.bloom.filter.full.positive COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.bloom.filter.full.true.positive COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:user_key_comparison_count = 20781531, block_cache_hit_count = 0, block_read_count = 0, block_read_byte = 0, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 0, bloom_sst_miss_count = 0, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = bloom_filter_full_positive = bloom_filter_full_true_positive = user_key_return_count = get_from_table_nanos = block_cache_hit_count = block_cache_miss_count =
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.bloom.filter.useful COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.bloom.filter.full.positive COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.bloom.filter.full.true.positive COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:user_key_comparison_count = 3811112, block_cache_hit_count = 4484, block_read_count = 7225, block_read_byte = 30314022, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 9696, bloom_sst_miss_count = 990294, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = 990294@level2, bloom_filter_full_positive = 9696@level2, bloom_filter_full_true_positive = 0@level2, user_key_return_count = 0@level2, get_from_table_nanos = 0@level2, block_cache_hit_count = 4484@level2, block_cache_miss_count = 7225@level2
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.bloom.filter.useful COUNT : 990294
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.bloom.filter.full.positive COUNT : 9696
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.bloom.filter.full.true.positive COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:user_key_comparison_count = 5821605, block_cache_hit_count = 37724, block_read_count = 779810, block_read_byte = 3272267891, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 835392512, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 817532, bloom_sst_miss_count = 182467, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = 182467@level2, bloom_filter_full_positive = 817532@level2, bloom_filter_full_true_positive = 815813@level2, user_key_return_count = 815813@level2, get_from_table_nanos = 0@level2, block_cache_hit_count = 37724@level2, block_cache_miss_count = 779810@level2
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.bloom.filter.useful COUNT : 182467
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.bloom.filter.full.positive COUNT : 817532
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.bloom.filter.full.true.positive COUNT : 815813
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:user_key_comparison_count = 6, block_cache_hit_count = 0, block_read_count = 0, block_read_byte = 0, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 0, bloom_sst_miss_count = 0, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = bloom_filter_full_positive = bloom_filter_full_true_positive = user_key_return_count = get_from_table_nanos = block_cache_hit_count = block_cache_miss_count =
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.bloom.filter.useful COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.bloom.filter.full.positive COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.bloom.filter.full.true.positive COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.bloom.filter.useful COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.bloom.filter.full.positive COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.bloom.filter.full.true.positive COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:user_key_comparison_count = 20920474, block_cache_hit_count = 0, block_read_count = 0, block_read_byte = 0, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 0, bloom_sst_miss_count = 0, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = bloom_filter_full_positive = bloom_filter_full_true_positive = user_key_return_count = get_from_table_nanos = block_cache_hit_count = block_cache_miss_count =
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.bloom.filter.useful COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.bloom.filter.full.positive COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.bloom.filter.full.true.positive COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:user_key_comparison_count = 3638904, block_cache_hit_count = 4418, block_read_count = 7025, block_read_byte = 29468262, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 9518, bloom_sst_miss_count = 990465, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = 990465@level2, bloom_filter_full_positive = 9518@level2, bloom_filter_full_true_positive = 0@level2, user_key_return_count = 0@level2, get_from_table_nanos = 0@level2, block_cache_hit_count = 4418@level2, block_cache_miss_count = 7025@level2
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.bloom.filter.useful COUNT : 990465
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.bloom.filter.full.positive COUNT : 9518
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.bloom.filter.full.true.positive COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:user_key_comparison_count = 5652055, block_cache_hit_count = 37664, block_read_count = 779803, block_read_byte = 3271865341, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 835392512, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 817466, bloom_sst_miss_count = 182533, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = 182533@level2, bloom_filter_full_positive = 817466@level2, bloom_filter_full_true_positive = 815813@level2, user_key_return_count = 815813@level2, get_from_table_nanos = 0@level2, block_cache_hit_count = 37664@level2, block_cache_miss_count = 779803@level2
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.bloom.filter.useful COUNT : 182533
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.bloom.filter.full.positive COUNT : 817466
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.bloom.filter.full.true.positive COUNT : 815813
+
+=== MÉTRICAS DE CACHÉ DE FILTROS ===
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:user_key_comparison_count = 6, block_cache_hit_count = 0, block_read_count = 0, block_read_byte = 0, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 0, bloom_sst_miss_count = 0, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = bloom_filter_full_positive = bloom_filter_full_true_positive = user_key_return_count = get_from_table_nanos = block_cache_hit_count = block_cache_miss_count =
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.filter.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.filter.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.filter.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.filter.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.filter.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.filter.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.filter.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.filter.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.filter.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.filter.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:user_key_comparison_count = 20781531, block_cache_hit_count = 0, block_read_count = 0, block_read_byte = 0, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 0, bloom_sst_miss_count = 0, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = bloom_filter_full_positive = bloom_filter_full_true_positive = user_key_return_count = get_from_table_nanos = block_cache_hit_count = block_cache_miss_count =
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.filter.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.filter.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.filter.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.filter.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.filter.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:user_key_comparison_count = 3811112, block_cache_hit_count = 4484, block_read_count = 7225, block_read_byte = 30314022, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 9696, bloom_sst_miss_count = 990294, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = 990294@level2, bloom_filter_full_positive = 9696@level2, bloom_filter_full_true_positive = 0@level2, user_key_return_count = 0@level2, get_from_table_nanos = 0@level2, block_cache_hit_count = 4484@level2, block_cache_miss_count = 7225@level2
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.filter.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.filter.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.filter.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.filter.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.filter.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:user_key_comparison_count = 5821605, block_cache_hit_count = 37724, block_read_count = 779810, block_read_byte = 3272267891, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 835392512, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 817532, bloom_sst_miss_count = 182467, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = 182467@level2, bloom_filter_full_positive = 817532@level2, bloom_filter_full_true_positive = 815813@level2, user_key_return_count = 815813@level2, get_from_table_nanos = 0@level2, block_cache_hit_count = 37724@level2, block_cache_miss_count = 779810@level2
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.filter.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.filter.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.filter.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.filter.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.filter.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:user_key_comparison_count = 6, block_cache_hit_count = 0, block_read_count = 0, block_read_byte = 0, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 0, bloom_sst_miss_count = 0, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = bloom_filter_full_positive = bloom_filter_full_true_positive = user_key_return_count = get_from_table_nanos = block_cache_hit_count = block_cache_miss_count =
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.filter.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.filter.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.filter.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.filter.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.filter.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.filter.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.filter.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.filter.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.filter.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.filter.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:user_key_comparison_count = 20920474, block_cache_hit_count = 0, block_read_count = 0, block_read_byte = 0, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 0, bloom_sst_miss_count = 0, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = bloom_filter_full_positive = bloom_filter_full_true_positive = user_key_return_count = get_from_table_nanos = block_cache_hit_count = block_cache_miss_count =
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.filter.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.filter.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.filter.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.filter.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.filter.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:user_key_comparison_count = 3638904, block_cache_hit_count = 4418, block_read_count = 7025, block_read_byte = 29468262, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 9518, bloom_sst_miss_count = 990465, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = 990465@level2, bloom_filter_full_positive = 9518@level2, bloom_filter_full_true_positive = 0@level2, user_key_return_count = 0@level2, get_from_table_nanos = 0@level2, block_cache_hit_count = 4418@level2, block_cache_miss_count = 7025@level2
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.filter.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.filter.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.filter.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.filter.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.filter.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:user_key_comparison_count = 5652055, block_cache_hit_count = 37664, block_read_count = 779803, block_read_byte = 3271865341, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 835392512, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 817466, bloom_sst_miss_count = 182533, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = 182533@level2, bloom_filter_full_positive = 817466@level2, bloom_filter_full_true_positive = 815813@level2, user_key_return_count = 815813@level2, get_from_table_nanos = 0@level2, block_cache_hit_count = 37664@level2, block_cache_miss_count = 779803@level2
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.filter.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.filter.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.filter.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.filter.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.filter.add.redundant COUNT : 0
+
+=== CONTADORES DE LECTURA Y CACHÉ ===
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:user_key_comparison_count = 6, block_cache_hit_count = 0, block_read_count = 0, block_read_byte = 0, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 0, bloom_sst_miss_count = 0, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = bloom_filter_full_positive = bloom_filter_full_true_positive = user_key_return_count = get_from_table_nanos = block_cache_hit_count = block_cache_miss_count =
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.index.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.index.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.index.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.index.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.data.miss COUNT : 366774
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.data.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.data.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.data.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.memtable.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.memtable.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.number.keys.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.db.iter.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.number.multiget.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.blobdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.blobdb.blob.file.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.index.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.block.cache.data.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.blobdb.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.index.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.index.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.index.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.index.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.data.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.data.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.data.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.data.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.memtable.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.memtable.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.number.keys.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.db.iter.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.number.multiget.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.blobdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.blobdb.blob.file.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.index.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.block.cache.data.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.blobdb.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:user_key_comparison_count = 20781531, block_cache_hit_count = 0, block_read_count = 0, block_read_byte = 0, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 0, bloom_sst_miss_count = 0, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = bloom_filter_full_positive = bloom_filter_full_true_positive = user_key_return_count = get_from_table_nanos = block_cache_hit_count = block_cache_miss_count =
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.index.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.index.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.index.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.index.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.data.miss COUNT : 910157
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.data.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.data.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.data.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.memtable.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.memtable.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.number.keys.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.db.iter.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.number.multiget.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.blobdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.blobdb.blob.file.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.index.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.block.cache.data.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.blobdb.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:user_key_comparison_count = 3811112, block_cache_hit_count = 4484, block_read_count = 7225, block_read_byte = 30314022, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 9696, bloom_sst_miss_count = 990294, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = 990294@level2, bloom_filter_full_positive = 9696@level2, bloom_filter_full_true_positive = 0@level2, user_key_return_count = 0@level2, get_from_table_nanos = 0@level2, block_cache_hit_count = 4484@level2, block_cache_miss_count = 7225@level2
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.index.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.index.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.index.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.index.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.data.miss COUNT : 7225
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.data.hit COUNT : 4484
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.data.add COUNT : 7225
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.data.bytes.insert COUNT : 31098800
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.bytes.read COUNT : 19300640
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.memtable.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.memtable.miss COUNT : 1000000
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.number.keys.read COUNT : 1000000
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.db.iter.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.number.multiget.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.blobdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.blobdb.blob.file.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.index.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.block.cache.data.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.blobdb.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:user_key_comparison_count = 5821605, block_cache_hit_count = 37724, block_read_count = 779810, block_read_byte = 3272267891, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 835392512, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 817532, bloom_sst_miss_count = 182467, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = 182467@level2, bloom_filter_full_positive = 817532@level2, bloom_filter_full_true_positive = 815813@level2, user_key_return_count = 815813@level2, get_from_table_nanos = 0@level2, block_cache_hit_count = 37724@level2, block_cache_miss_count = 779810@level2
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.index.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.index.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.index.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.index.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.data.miss COUNT : 779810
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.data.hit COUNT : 37724
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.data.add COUNT : 779810
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.data.bytes.insert COUNT : 3356640800
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.bytes.read COUNT : 162382192
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.memtable.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.memtable.miss COUNT : 1000000
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.number.keys.read COUNT : 1000000
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.bytes.read COUNT : 835392512
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.db.iter.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.number.multiget.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.blobdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.blobdb.blob.file.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.index.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.block.cache.data.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.blobdb.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:user_key_comparison_count = 6, block_cache_hit_count = 0, block_read_count = 0, block_read_byte = 0, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 0, bloom_sst_miss_count = 0, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = bloom_filter_full_positive = bloom_filter_full_true_positive = user_key_return_count = get_from_table_nanos = block_cache_hit_count = block_cache_miss_count =
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.index.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.index.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.index.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.index.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.data.miss COUNT : 337172
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.data.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.data.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.data.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.memtable.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.memtable.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.number.keys.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.db.iter.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.number.multiget.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.blobdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.blobdb.blob.file.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.index.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.block.cache.data.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.blobdb.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.index.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.index.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.index.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.index.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.data.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.data.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.data.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.data.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.memtable.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.memtable.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.number.keys.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.db.iter.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.number.multiget.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.blobdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.blobdb.blob.file.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.index.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.block.cache.data.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.blobdb.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:user_key_comparison_count = 20920474, block_cache_hit_count = 0, block_read_count = 0, block_read_byte = 0, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 0, bloom_sst_miss_count = 0, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = bloom_filter_full_positive = bloom_filter_full_true_positive = user_key_return_count = get_from_table_nanos = block_cache_hit_count = block_cache_miss_count =
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.index.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.index.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.index.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.index.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.data.miss COUNT : 934748
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.data.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.data.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.data.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.memtable.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.memtable.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.number.keys.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.db.iter.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.number.multiget.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.blobdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.blobdb.blob.file.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.index.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.block.cache.data.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.blobdb.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:user_key_comparison_count = 3638904, block_cache_hit_count = 4418, block_read_count = 7025, block_read_byte = 29468262, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 0, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 9518, bloom_sst_miss_count = 990465, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = 990465@level2, bloom_filter_full_positive = 9518@level2, bloom_filter_full_true_positive = 0@level2, user_key_return_count = 0@level2, get_from_table_nanos = 0@level2, block_cache_hit_count = 4418@level2, block_cache_miss_count = 7025@level2
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.index.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.index.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.index.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.index.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.data.miss COUNT : 7025
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.data.hit COUNT : 4418
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.data.add COUNT : 7025
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.data.bytes.insert COUNT : 30238240
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.bytes.read COUNT : 19016672
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.memtable.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.memtable.miss COUNT : 1000000
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.number.keys.read COUNT : 1000000
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.db.iter.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.number.multiget.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.blobdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.blobdb.blob.file.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.index.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.block.cache.data.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.blobdb.cache.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:user_key_comparison_count = 5652055, block_cache_hit_count = 37664, block_read_count = 779803, block_read_byte = 3271865341, block_read_time = 0, block_read_cpu_time = 0, block_cache_index_hit_count = 0, block_cache_standalone_handle_count = 0, block_cache_real_handle_count = 0, index_block_read_count = 0, block_cache_filter_hit_count = 0, filter_block_read_count = 0, compression_dict_block_read_count = 0, secondary_cache_hit_count = 0, compressed_sec_cache_insert_real_count = 0, compressed_sec_cache_insert_dummy_count = 0, compressed_sec_cache_uncompressed_bytes = 0, compressed_sec_cache_compressed_bytes = 0, block_checksum_time = 0, block_decompress_time = 0, get_read_bytes = 835392512, multiget_read_bytes = 0, iter_read_bytes = 0, blob_cache_hit_count = 0, blob_read_count = 0, blob_read_byte = 0, blob_read_time = 0, blob_checksum_time = 0, blob_decompress_time = 0, internal_key_skipped_count = 0, internal_delete_skipped_count = 0, internal_recent_skipped_count = 0, internal_merge_count = 0, internal_merge_point_lookup_count = 0, internal_range_del_reseek_count = 0, get_snapshot_time = 0, get_from_memtable_time = 0, get_from_memtable_count = 0, get_post_process_time = 0, get_from_output_files_time = 0, seek_on_memtable_time = 0, seek_on_memtable_count = 0, next_on_memtable_count = 0, prev_on_memtable_count = 0, seek_child_seek_time = 0, seek_child_seek_count = 0, seek_min_heap_time = 0, seek_max_heap_time = 0, seek_internal_seek_time = 0, find_next_user_entry_time = 0, write_wal_time = 0, write_memtable_time = 0, write_delay_time = 0, write_scheduling_flushes_compactions_time = 0, write_pre_and_post_process_time = 0, write_thread_wait_nanos = 0, db_mutex_lock_nanos = 0, db_condition_wait_nanos = 0, merge_operator_time_nanos = 0, read_index_block_nanos = 0, read_filter_block_nanos = 0, new_table_block_iter_nanos = 0, new_table_iterator_nanos = 0, block_seek_nanos = 0, find_table_nanos = 0, bloom_memtable_hit_count = 0, bloom_memtable_miss_count = 0, bloom_sst_hit_count = 817466, bloom_sst_miss_count = 182533, key_lock_wait_time = 0, key_lock_wait_count = 0, env_new_sequential_file_nanos = 0, env_new_random_access_file_nanos = 0, env_new_writable_file_nanos = 0, env_reuse_writable_file_nanos = 0, env_new_random_rw_file_nanos = 0, env_new_directory_nanos = 0, env_file_exists_nanos = 0, env_get_children_nanos = 0, env_get_children_file_attributes_nanos = 0, env_delete_file_nanos = 0, env_create_dir_nanos = 0, env_create_dir_if_missing_nanos = 0, env_delete_dir_nanos = 0, env_get_file_size_nanos = 0, env_get_file_modification_time_nanos = 0, env_rename_file_nanos = 0, env_link_file_nanos = 0, env_lock_file_nanos = 0, env_unlock_file_nanos = 0, env_new_logger_nanos = 0, get_cpu_nanos = 0, iter_next_cpu_nanos = 0, iter_prev_cpu_nanos = 0, iter_seek_cpu_nanos = 0, iter_next_count = 0, iter_prev_count = 0, iter_seek_count = 0, encrypt_data_nanos = 0, decrypt_data_nanos = 0, number_async_seek = 0, bloom_filter_useful = 182533@level2, bloom_filter_full_positive = 817466@level2, bloom_filter_full_true_positive = 815813@level2, user_key_return_count = 815813@level2, get_from_table_nanos = 0@level2, block_cache_hit_count = 37664@level2, block_cache_miss_count = 779803@level2
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.index.miss COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.index.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.index.add COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.index.bytes.insert COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.data.miss COUNT : 779803
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.data.hit COUNT : 37664
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.data.add COUNT : 779803
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.data.bytes.insert COUNT : 3356573024
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.bytes.read COUNT : 162119376
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.memtable.hit COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.memtable.miss COUNT : 1000000
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.number.keys.read COUNT : 1000000
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.bytes.read COUNT : 835392512
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.db.iter.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.number.multiget.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.blobdb.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.blobdb.blob.file.bytes.read COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.index.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.block.cache.data.add.redundant COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.blobdb.cache.bytes.read COUNT : 0
+
+=== ESCRITURA Y COMPACTACIÓN ===
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.number.keys.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.stall.micros COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.compact.read.bytes COUNT : 1543576263
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.compact.write.bytes COUNT : 1305470731
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.flush.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.blobdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.blobdb.blob.file.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.remote.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.remote.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_compact.log:rocksdb.db.write.stall P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:Write Stall (count): cf-l0-file-count-limit-delays-with-ongoing-compaction: 0, cf-l0-file-count-limit-stops-with-ongoing-compaction: 0, l0-file-count-limit-delays: 0, l0-file-count-limit-stops: 0, memtable-limit-delays: 0, memtable-limit-stops: 0, pending-compaction-bytes-delays: 0, pending-compaction-bytes-stops: 0, total-delays: 0, total-stops: 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:Cumulative stall: 00:00:0.000 H:M:S, 0.0 percent
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:Interval stall: 00:00:0.000 H:M:S, 0.0 percent
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:Write Stall (count): write-buffer-manager-limit-stops: 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.number.keys.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.stall.micros COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.flush.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.blobdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.blobdb.blob.file.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.remote.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.remote.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_db_stats.log:rocksdb.db.write.stall P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.number.keys.written COUNT : 1000000
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.bytes.written COUNT : 1056000000
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.stall.micros COUNT : 1778208
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.compact.read.bytes COUNT : 3830649906
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.compact.write.bytes COUNT : 3655343188
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.flush.write.bytes COUNT : 1046910439
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.blobdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.blobdb.blob.file.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.remote.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.remote.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_fillrandom.log:rocksdb.db.write.stall P50 : 5327.142857 P95 : 18820.000000 P99 : 27302.000000 P100 : 27609.000000 COUNT : 259 SUM : 1778208
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.number.keys.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.stall.micros COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.flush.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.blobdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.blobdb.blob.file.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.remote.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.remote.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readmissing.log:rocksdb.db.write.stall P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.number.keys.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.stall.micros COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.flush.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.blobdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.blobdb.blob.file.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.remote.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.remote.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_bloom10_readrandom.log:rocksdb.db.write.stall P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.number.keys.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.stall.micros COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.compact.read.bytes COUNT : 1418837846
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.compact.write.bytes COUNT : 1244286236
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.flush.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.blobdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.blobdb.blob.file.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.remote.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.remote.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_compact.log:rocksdb.db.write.stall P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:Write Stall (count): cf-l0-file-count-limit-delays-with-ongoing-compaction: 0, cf-l0-file-count-limit-stops-with-ongoing-compaction: 0, l0-file-count-limit-delays: 0, l0-file-count-limit-stops: 0, memtable-limit-delays: 0, memtable-limit-stops: 0, pending-compaction-bytes-delays: 0, pending-compaction-bytes-stops: 0, total-delays: 0, total-stops: 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:Cumulative stall: 00:00:0.000 H:M:S, 0.0 percent
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:Interval stall: 00:00:0.000 H:M:S, 0.0 percent
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:Write Stall (count): write-buffer-manager-limit-stops: 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.number.keys.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.stall.micros COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.flush.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.blobdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.blobdb.blob.file.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.remote.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.remote.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_db_stats.log:rocksdb.db.write.stall P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.number.keys.written COUNT : 1000000
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.bytes.written COUNT : 1056000000
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.stall.micros COUNT : 1965725
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.compact.read.bytes COUNT : 3934514581
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.compact.write.bytes COUNT : 3725057406
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.flush.write.bytes COUNT : 1050888550
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.blobdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.blobdb.blob.file.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.remote.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.remote.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_fillrandom.log:rocksdb.db.write.stall P50 : 0.565113 P95 : 3726.875000 P99 : 12773.727273 P100 : 28641.000000 COUNT : 3758 SUM : 1965928
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.number.keys.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.stall.micros COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.flush.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.blobdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.blobdb.blob.file.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.remote.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.remote.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readmissing.log:rocksdb.db.write.stall P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.number.keys.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.stall.micros COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.flush.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.blobdb.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.blobdb.blob.file.bytes.written COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.remote.compact.read.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.remote.compact.write.bytes COUNT : 0
+/home/maykoll_vanegas/kv_engines_clean/results/experiment_b/speedb/speedb_ribbon10eq_readrandom.log:rocksdb.db.write.stall P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+
+=== TAMAÑO DE LAS BASES ===
+--- speedb_bloom10_database_size.txt
+667546439	/home/maykoll_vanegas/kv_engines_clean/data/experiment_b/speedb/speedb_bloom10
+--- speedb_ribbon10eq_database_size.txt
+667259402	/home/maykoll_vanegas/kv_engines_clean/data/experiment_b/speedb/speedb_ribbon10eq
+
+=== ESTADÍSTICAS ESTRUCTURALES ===
+
+---------------- speedb_bloom10_db_stats.log ----------------
+Speedb:     version 2.8
+Date:       Fri Jul 24 22:31:26 2026
+CPU:        16 * 12th Gen Intel(R) Core(TM) i5-12600KF
+CPUCache:   20480 KB
+
+BEFORE Benchmark (stats): 0 OF 0
+
+Set seed to 1784950286403058 because --seed was 0
+Initializing Options from the specified file
+Initializing database Options from command-line flags
+Integrated BlobDB: blob cache disabled
+Keys:       16 bytes each (+ 0 bytes user-defined timestamp)
+Values:     100 bytes each (100 bytes after compression)
+Entries:    1000000
+Prefix:    0 bytes
+Keys per prefix:    0
+RawSize:    110.6 MB (estimated)
+FileSize:   110.6 MB (estimated)
+Write rate: 0 bytes/second
+Read rate: 0 ops/second
+Compression: Snappy
+Compression sampling rate: 0
+Memtablerep: skip_list
+Perf Level: 1
+------------------------------------------------
+
+
+** Compaction Stats [default] **
+Level    Files   Size     Score Read(GB)  Rn(GB) Rnp1(GB) Write(GB) Wnew(GB) Moved(GB) W-Amp Rd(MB/s) Wr(MB/s) Comp(sec) CompMergeCPU(sec) Comp(cnt) Avg(sec) KeyIn KeyDrop Rblob(GB) Wblob(GB)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  L2     11/0   634.76 MB   0.2      0.0     0.0      0.0       0.0      0.0       0.0   0.0      0.0      0.0      0.00              0.00         0    0.000       0      0       0.0       0.0
+ Sum     11/0   634.76 MB   0.0      0.0     0.0      0.0       0.0      0.0       0.0   0.0      0.0      0.0      0.00              0.00         0    0.000       0      0       0.0       0.0
+ Int      0/0    0.00 KB   0.0      0.0     0.0      0.0       0.0      0.0       0.0   0.0      0.0      0.0      0.00              0.00         0    0.000       0      0       0.0       0.0
+
+** Compaction Stats [default] **
+Priority    Files   Size     Score Read(GB)  Rn(GB) Rnp1(GB) Write(GB) Wnew(GB) Moved(GB) W-Amp Rd(MB/s) Wr(MB/s) Comp(sec) CompMergeCPU(sec) Comp(cnt) Avg(sec) KeyIn KeyDrop Rblob(GB) Wblob(GB)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Blob file count: 0, total size: 0.0 GB, garbage size: 0.0 GB, space amp: 0.0
+
+Uptime(secs): 0.0 total, 0.0 interval
+Flush(GB): cumulative 0.000, interval 0.000
+AddFile(GB): cumulative 0.000, interval 0.000
+AddFile(Total Files): cumulative 0, interval 0
+AddFile(L0 Files): cumulative 0, interval 0
+AddFile(Keys): cumulative 0, interval 0
+Cumulative compaction: 0.00 GB write, 0.00 MB/s write, 0.00 GB read, 0.00 MB/s read, 0.0 seconds
+Interval compaction: 0.00 GB write, 0.00 MB/s write, 0.00 GB read, 0.00 MB/s read, 0.0 seconds
+Write Stall (count): cf-l0-file-count-limit-delays-with-ongoing-compaction: 0, cf-l0-file-count-limit-stops-with-ongoing-compaction: 0, l0-file-count-limit-delays: 0, l0-file-count-limit-stops: 0, memtable-limit-delays: 0, memtable-limit-stops: 0, pending-compaction-bytes-delays: 0, pending-compaction-bytes-stops: 0, total-delays: 0, total-stops: 0
+
+Block cache LRUCache@0x5602ae7ff940#58145 capacity: 32.00 MB seed: 532891122 usage: 0.09 KB table_size: 1024 occupancy: 1 collections: 1 last_copies: 0 last_secs: 5e-05 secs_since: 0
+Block cache entry stats(count,size,portion): Misc(1,0.00 KB,0%)
+Block cache [default]  DataBlock(0.00 KB) FilterBlock(0.00 KB) IndexBlock(0.00 KB)
+
+** File Read Latency Histogram By Level [default] **
+** Level 2 read latency histogram (micros):
+Count: 55 Average: 70.3818  StdDev: 151.37
+Min: 0  Median: 1.3571  Max: 559
+Percentiles: P50: 1.36 P75: 32.71 P99: 552.50 P99.9: 559.00 P99.99: 559.00
+------------------------------------------------------
+[       0,       1 ]       25  45.455%  45.455% #########
+(       1,       2 ]        7  12.727%  58.182% ###
+(       2,       3 ]        1   1.818%  60.000% 
+(       3,       4 ]        1   1.818%  61.818% 
+(       6,      10 ]        1   1.818%  63.636% 
+(      22,      34 ]        7  12.727%  76.364% ###
+(      34,      51 ]        1   1.818%  78.182% 
+(      51,      76 ]        1   1.818%  80.000% 
+(      76,     110 ]        1   1.818%  81.818% 
+(     110,     170 ]        3   5.455%  87.273% #
+(     170,     250 ]        1   
+AFTER Benchmark (stats): 0 OF 0
+
+BEFORE Benchmark (levelstats): 0 OF 0
+
+
+AFTER Benchmark (levelstats): 0 OF 0
+
+BEFORE Benchmark (memstats): 0 OF 0
+
+
+AFTER Benchmark (memstats): 0 OF 0
+
+BEFORE Benchmark (sstables): 0 OF 0
+
+
+AFTER Benchmark (sstables): 0 OF 0
+1.818%  89.091% 
+(     250,     380 ]        2   3.636%  92.727% #
+(     380,     580 ]        4   7.273% 100.000% #
+
+
+** DB Stats **
+Uptime(secs): 0.0 total, 0.0 interval
+Cumulative writes: 0 writes, 0 keys, 0 commit groups, 0.0 writes per commit group, ingest: 0.00 GB, 0.00 MB/s
+Cumulative WAL: 0 writes, 0 syncs, 0.00 writes per sync, written: 0.00 GB, 0.00 MB/s
+Cumulative stall: 00:00:0.000 H:M:S, 0.0 percent
+Interval writes: 0 writes, 0 keys, 0 commit groups, 0.0 writes per commit group, ingest: 0.00 MB, 0.00 MB/s
+Interval WAL: 0 writes, 0 syncs, 0.00 writes per sync, written: 0.00 GB, 0.00 MB/s
+Interval stall: 00:00:0.000 H:M:S, 0.0 percent
+Write Stall (count): write-buffer-manager-limit-stops: 0
+
+
+Level Files Size(MB)
+--------------------
+  0        0        0
+  1        0        0
+  2       11      635
+  3        0        0
+  4        0        0
+  5        0        0
+  6        0        0
+
+rocksdb.num-immutable-mem-table: 0
+rocksdb.cur-size-active-mem-table: 2048
+rocksdb.cur-size-all-mem-tables: 2048
+rocksdb.size-all-mem-tables: 2048
+rocksdb.num-entries-active-mem-table: 0
+rocksdb.num-entries-imm-mem-tables: 0
+
+--- level 0 --- version# 2 ---
+--- level 1 --- version# 2 ---
+--- level 2 --- version# 2 ---
+ 651:67375924[0 .. 0]['00000000000000003030303030303030' seq:0, type:1 .. '00000000000189123030303030303030' seq:0, type:1](0)
+ 652:67375998[0 .. 0]['00000000000189163030303030303030' seq:0, type:1 .. '00000000000315773030303030303030' seq:0, type:1](0)
+ 653:12952326[0 .. 0]['00000000000315783030303030303030' seq:0, type:1 .. '00000000000361F83030303030303030' seq:0, type:1](0)
+ 654:67374846[0 .. 0]['00000000000361F93030303030303030' seq:0, type:1 .. '000000000004EDBB3030303030303030' seq:0, type:1](0)
+ 655:67372433[0 .. 0]['000000000004EDBD3030303030303030' seq:0, type:1 .. '000000000006792A3030303030303030' seq:0, type:1](0)
+ 656:67374354[0 .. 0]['000000000006792C3030303030303030' seq:0, type:1 .. '00000000000805823030303030303030' seq:0, type:1](0)
+ 657:67376026[0 .. 0]['00000000000805833030303030303030' seq:0, type:1 .. '000000000009920A3030303030303030' seq:0, type:1](0)
+ 658:67375752[0 .. 0]['000000000009920B3030303030303030' seq:0, type:1 .. '00000000000B1CA63030303030303030' seq:0, type:1](0)
+ 659:67374955[0 .. 0]['00000000000B1CA73030303030303030' seq:0, type:1 .. '00000000000CA7773030303030303030' seq:0, type:1](0)
+ 660:67374711[0 .. 0]['00000000000CA7783030303030303030' seq:0, type:1 .. '00000000000E32593030303030303030' seq:0, type:1](0)
+ 661:46270384[0 .. 0]['00000000000E325A3030303030303030' seq:0, type:1 .. '00000000000F423F3030303030303030' seq:0, type:1](0)
+--- level 3 --- version# 2 ---
+--- level 4 --- version# 2 ---
+--- level 5 --- version# 2 ---
+--- level 6 --- version# 2 ---
+
+STATISTICS:
+rocksdb.block.cache.miss COUNT : 0
+rocksdb.block.cache.hit COUNT : 0
+rocksdb.block.cache.add COUNT : 0
+rocksdb.block.cache.add.failures COUNT : 0
+rocksdb.block.cache.index.miss COUNT : 0
+rocksdb.block.cache.index.hit COUNT : 0
+rocksdb.block.cache.index.add COUNT : 0
+rocksdb.block.cache.index.bytes.insert COUNT : 0
+rocksdb.block.cache.filter.miss COUNT : 0
+rocksdb.block.cache.filter.hit COUNT : 0
+rocksdb.block.cache.filter.add COUNT : 0
+rocksdb.block.cache.filter.bytes.insert COUNT : 0
+rocksdb.block.cache.data.miss COUNT : 0
+rocksdb.block.cache.data.hit COUNT : 0
+rocksdb.block.cache.data.add COUNT : 0
+rocksdb.block.cache.data.bytes.insert COUNT : 0
+rocksdb.block.cache.bytes.read COUNT : 0
+rocksdb.block.cache.bytes.write COUNT : 0
+rocksdb.bloom.filter.useful COUNT : 0
+rocksdb.bloom.filter.full.positive COUNT : 0
+rocksdb.bloom.filter.full.true.positive COUNT : 0
+rocksdb.persistent.cache.hit COUNT : 0
+rocksdb.persistent.cache.miss COUNT : 0
+rocksdb.sim.block.cache.hit COUNT : 0
+rocksdb.sim.block.cache.miss COUNT : 0
+rocksdb.memtable.hit COUNT : 0
+rocksdb.memtable.miss COUNT : 0
+rocksdb.l0.hit COUNT : 0
+rocksdb.l1.hit COUNT : 0
+rocksdb.l2andup.hit COUNT : 0
+rocksdb.compaction.key.drop.new COUNT : 0
+rocksdb.compaction.key.drop.obsolete COUNT : 0
+rocksdb.compaction.key.drop.range_del COUNT : 0
+rocksdb.compaction.key.drop.user COUNT : 0
+rocksdb.compaction.range_del.drop.obsolete COUNT : 0
+rocksdb.compaction.optimized.del.drop.obsolete COUNT : 0
+rocksdb.compaction.cancelled COUNT : 0
+rocksdb.number.keys.written COUNT : 0
+rocksdb.number.keys.read COUNT : 0
+rocksdb.number.keys.updated COUNT : 0
+rocksdb.bytes.written COUNT : 0
+rocksdb.bytes.read COUNT : 0
+rocksdb.number.db.seek COUNT : 0
+rocksdb.number.db.next COUNT : 0
+rocksdb.number.db.prev COUNT : 0
+rocksdb.number.db.seek.found COUNT : 0
+rocksdb.number.db.next.found COUNT : 0
+rocksdb.number.db.prev.found COUNT : 0
+rocksdb.db.iter.bytes.read COUNT : 0
+rocksdb.no.file.opens COUNT : 11
+rocksdb.no.file.errors COUNT : 0
+rocksdb.stall.micros COUNT : 0
+rocksdb.db.mutex.wait.micros COUNT : 0
+rocksdb.number.multiget.get COUNT : 0
+rocksdb.number.multiget.keys.read COUNT : 0
+rocksdb.number.multiget.bytes.read COUNT : 0
+rocksdb.number.merge.failures COUNT : 0
+rocksdb.bloom.filter.prefix.checked COUNT : 0
+rocksdb.bloom.filter.prefix.useful COUNT : 0
+rocksdb.bloom.filter.prefix.true.positive COUNT : 0
+rocksdb.number.reseeks.iteration COUNT : 0
+rocksdb.getupdatessince.calls COUNT : 0
+rocksdb.wal.synced COUNT : 0
+rocksdb.wal.bytes COUNT : 0
+rocksdb.write.self COUNT : 0
+rocksdb.write.other COUNT : 0
+rocksdb.write.wal COUNT : 0
+rocksdb.compact.read.bytes COUNT : 0
+rocksdb.compact.write.bytes COUNT : 0
+rocksdb.flush.write.bytes COUNT : 0
+rocksdb.compact.read.marked.bytes COUNT : 0
+rocksdb.compact.read.periodic.bytes COUNT : 0
+rocksdb.compact.read.ttl.bytes COUNT : 0
+rocksdb.compact.write.marked.bytes COUNT : 0
+rocksdb.compact.write.periodic.bytes COUNT : 0
+rocksdb.compact.write.ttl.bytes COUNT : 0
+rocksdb.number.direct.load.table.properties COUNT : 0
+rocksdb.number.superversion_acquires COUNT : 0
+rocksdb.number.superversion_releases COUNT : 0
+rocksdb.number.superversion_cleanups COUNT : 0
+rocksdb.number.block.compressed COUNT : 0
+rocksdb.number.block.decompressed COUNT : 11
+rocksdb.number.block.not_compressed COUNT : 0
+rocksdb.merge.operation.time.nanos COUNT : 0
+rocksdb.filter.operation.time.nanos COUNT : 0
+rocksdb.row.cache.hit COUNT : 0
+rocksdb.row.cache.miss COUNT : 0
+rocksdb.read.amp.estimate.useful.bytes COUNT : 0
+rocksdb.read.amp.total.read.bytes COUNT : 0
+rocksdb.number.rate_limiter.drains COUNT : 0
+rocksdb.number.iter.skip COUNT : 0
+rocksdb.blobdb.num.put COUNT : 0
+rocksdb.blobdb.num.write COUNT : 0
+rocksdb.blobdb.num.get COUNT : 0
+rocksdb.blobdb.num.multiget COUNT : 0
+rocksdb.blobdb.num.seek COUNT : 0
+rocksdb.blobdb.num.next COUNT : 0
+rocksdb.blobdb.num.prev COUNT : 0
+rocksdb.blobdb.num.keys.written COUNT : 0
+rocksdb.blobdb.num.keys.read COUNT : 0
+rocksdb.blobdb.bytes.written COUNT : 0
+rocksdb.blobdb.bytes.read COUNT : 0
+rocksdb.blobdb.write.inlined COUNT : 0
+rocksdb.blobdb.write.inlined.ttl COUNT : 0
+rocksdb.blobdb.write.blob COUNT : 0
+rocksdb.blobdb.write.blob.ttl COUNT : 0
+rocksdb.blobdb.blob.file.bytes.written COUNT : 0
+rocksdb.blobdb.blob.file.bytes.read COUNT : 0
+rocksdb.blobdb.blob.file.synced COUNT : 0
+rocksdb.blobdb.blob.index.expired.count COUNT : 0
+rocksdb.blobdb.blob.index.expired.size COUNT : 0
+rocksdb.blobdb.blob.index.evicted.count COUNT : 0
+rocksdb.blobdb.blob.index.evicted.size COUNT : 0
+rocksdb.blobdb.gc.num.files COUNT : 0
+rocksdb.blobdb.gc.num.new.files COUNT : 0
+rocksdb.blobdb.gc.failures COUNT : 0
+rocksdb.blobdb.gc.num.keys.relocated COUNT : 0
+rocksdb.blobdb.gc.bytes.relocated COUNT : 0
+rocksdb.blobdb.fifo.num.files.evicted COUNT : 0
+rocksdb.blobdb.fifo.num.keys.evicted COUNT : 0
+rocksdb.blobdb.fifo.bytes.evicted COUNT : 0
+rocksdb.txn.overhead.mutex.prepare COUNT : 0
+rocksdb.txn.overhead.mutex.old.commit.map COUNT : 0
+rocksdb.txn.overhead.duplicate.key COUNT : 0
+rocksdb.txn.overhead.mutex.snapshot COUNT : 0
+rocksdb.txn.get.tryagain COUNT : 0
+rocksdb.number.multiget.keys.found COUNT : 0
+rocksdb.num.iterator.created COUNT : 0
+rocksdb.num.iterator.deleted COUNT : 0
+rocksdb.block.cache.compression.dict.miss COUNT : 0
+rocksdb.block.cache.compression.dict.hit COUNT : 0
+rocksdb.block.cache.compression.dict.add COUNT : 0
+rocksdb.block.cache.compression.dict.bytes.insert COUNT : 0
+rocksdb.block.cache.add.redundant COUNT : 0
+rocksdb.block.cache.index.add.redundant COUNT : 0
+rocksdb.block.cache.filter.add.redundant COUNT : 0
+rocksdb.block.cache.data.add.redundant COUNT : 0
+rocksdb.block.cache.compression.dict.add.redundant COUNT : 0
+rocksdb.files.marked.trash COUNT : 0
+rocksdb.files.marked.trash.deleted COUNT : 0
+rocksdb.files.deleted.immediately COUNT : 0
+rocksdb.error.handler.bg.error.count COUNT : 0
+rocksdb.error.handler.bg.errro.count COUNT : 0
+rocksdb.error.handler.bg.io.error.count COUNT : 0
+rocksdb.error.handler.bg.io.errro.count COUNT : 0
+rocksdb.error.handler.bg.retryable.io.error.count COUNT : 0
+rocksdb.error.handler.bg.retryable.io.errro.count COUNT : 0
+rocksdb.error.handler.autoresume.count COUNT : 0
+rocksdb.error.handler.autoresume.retry.total.count COUNT : 0
+rocksdb.error.handler.autoresume.success.count COUNT : 0
+rocksdb.memtable.payload.bytes.at.flush COUNT : 0
+rocksdb.memtable.garbage.bytes.at.flush COUNT : 0
+rocksdb.secondary.cache.hits COUNT : 0
+rocksdb.verify_checksum.read.bytes COUNT : 0
+rocksdb.backup.read.bytes COUNT : 0
+rocksdb.backup.write.bytes COUNT : 0
+rocksdb.remote.compact.read.bytes COUNT : 0
+rocksdb.remote.compact.write.bytes COUNT : 0
+rocksdb.hot.file.read.bytes COUNT : 0
+rocksdb.warm.file.read.bytes COUNT : 0
+rocksdb.cold.file.read.bytes COUNT : 0
+rocksdb.hot.file.read.count COUNT : 0
+rocksdb.warm.file.read.count COUNT : 0
+rocksdb.cold.file.read.count COUNT : 0
+rocksdb.last.level.read.bytes COUNT : 0
+rocksdb.last.level.read.count COUNT : 0
+rocksdb.non.last.level.read.bytes COUNT : 2592660
+rocksdb.non.last.level.read.count COUNT : 55
+rocksdb.last.level.seek.filtered COUNT : 0
+rocksdb.last.level.seek.filter.match COUNT : 0
+rocksdb.last.level.seek.data COUNT : 0
+rocksdb.last.level.seek.data.useful.no.filter COUNT : 0
+rocksdb.last.level.seek.data.useful.filter.match COUNT : 0
+rocksdb.non.last.level.seek.filtered COUNT : 0
+rocksdb.non.last.level.seek.filter.match COUNT : 0
+rocksdb.non.last.level.seek.data COUNT : 0
+rocksdb.non.last.level.seek.data.useful.no.filter COUNT : 0
+rocksdb.non.last.level.seek.data.useful.filter.match COUNT : 0
+rocksdb.block.checksum.compute.count COUNT : 33
+rocksdb.block.checksum.mismatch.count COUNT : 0
+rocksdb.multiget.coroutine.count COUNT : 0
+rocksdb.blobdb.cache.miss COUNT : 0
+rocksdb.blobdb.cache.hit COUNT : 0
+rocksdb.blobdb.cache.add COUNT : 0
+rocksdb.blobdb.cache.add.failures COUNT : 0
+rocksdb.blobdb.cache.bytes.read COUNT : 0
+rocksdb.blobdb.cache.bytes.write COUNT : 0
+rocksdb.read.async.micros COUNT : 0
+rocksdb.async.read.error.count COUNT : 0
+rocksdb.secondary.cache.filter.hits COUNT : 0
+rocksdb.secondary.cache.index.hits COUNT : 0
+rocksdb.secondary.cache.data.hits COUNT : 0
+rocksdb.table.open.prefetch.tail.miss COUNT : 0
+rocksdb.table.open.prefetch.tail.hit COUNT : 0
+rocksdb.timestamp.filter.table.checked COUNT : 0
+rocksdb.timestamp.filter.table.filtered COUNT : 0
+rocksdb.bytes.compressed.from COUNT : 0
+rocksdb.bytes.compressed.to COUNT : 0
+rocksdb.bytes.compression_bypassed COUNT : 0
+rocksdb.bytes.compression.rejected COUNT : 0
+rocksdb.number.block_compression_bypassed COUNT : 0
+rocksdb.number.block_compression_rejected COUNT : 0
+rocksdb.bytes.decompressed.from COUNT : 1790415
+rocksdb.bytes.decompressed.to COUNT : 3153789
+rocksdb.readahead.trimmed COUNT : 0
+rocksdb.db.get.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.write.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.compaction.times.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.compaction.times.cpu_micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.subcompaction.setup.times.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.table.sync.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.compaction.outfile.sync.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.wal.file.sync.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.manifest.file.sync.micros P50 : 2634.000000 P95 : 2634.000000 P99 : 2634.000000 P100 : 2634.000000 COUNT : 1 SUM : 2634
+rocksdb.table.open.io.micros P50 : 962.142857 P95 : 1053.000000 P99 : 1053.000000 P100 : 1053.000000 COUNT : 11 SUM : 9439
+rocksdb.db.multiget.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.read.block.compaction.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.read.block.get.micros P50 : 76.000000 P95 : 940.000000 P99 : 940.000000 P100 : 940.000000 COUNT : 22 SUM : 8290
+rocksdb.write.raw.block.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.numfiles.in.singlecompaction P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.seek.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.write.stall P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.sst.read.micros P50 : 1.357143 P95 : 442.500000 P99 : 552.500000 P100 : 559.000000 COUNT : 55 SUM : 3871
+rocksdb.file.read.flush.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.file.read.compaction.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.file.read.db.open.micros P50 : 1.357143 P95 : 442.500000 P99 : 552.500000 P100 : 559.000000 COUNT : 55 SUM : 3871
+rocksdb.file.read.get.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.file.read.multiget.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.file.read.db.iterator.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.file.read.verify.db.checksum.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.file.read.verify.file.checksums.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.num.subcompactions.scheduled P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.bytes.per.read P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.bytes.per.write P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.bytes.per.multiget P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.bytes.compressed P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.bytes.decompressed P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.compression.times.nanos P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.decompression.times.nanos P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.read.num.merge_operands P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.key.size P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.value.size P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.write.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.get.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.multiget.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.seek.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.next.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.prev.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.blob.file.write.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.blob.file.read.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.blob.file.sync.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.compression.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.decompression.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.flush.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.sst.batch.size P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.num.index.and.filter.blocks.read.per.level P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.num.sst.read.per.level P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.error.handler.autoresume.retry.count P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.async.read.bytes P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.poll.wait.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.prefetched.bytes.discarded P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.multiget.io.batch.size P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.num.level.read.per.multiget P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.async.prefetch.abort.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.get.mem.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.wal.write.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.write_wait_for_wal.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.write_wait_mutex.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.table.open.prefetch.tail.read.bytes P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+
+PINNING STATISTICS:
+Pinned Memory=0
+Pinned Attempts=33
+Pinned Counter=0
+Active Counter=0
+
+
+---------------- speedb_ribbon10eq_db_stats.log ----------------
+Speedb:     version 2.8
+Date:       Fri Jul 24 22:31:35 2026
+CPU:        16 * 12th Gen Intel(R) Core(TM) i5-12600KF
+CPUCache:   20480 KB
+
+BEFORE Benchmark (stats): 0 OF 0
+
+Set seed to 1784950295613673 because --seed was 0
+Initializing Options from the specified file
+Initializing database Options from command-line flags
+Integrated BlobDB: blob cache disabled
+Keys:       16 bytes each (+ 0 bytes user-defined timestamp)
+Values:     100 bytes each (100 bytes after compression)
+Entries:    1000000
+Prefix:    0 bytes
+Keys per prefix:    0
+RawSize:    110.6 MB (estimated)
+FileSize:   110.6 MB (estimated)
+Write rate: 0 bytes/second
+Read rate: 0 ops/second
+Compression: Snappy
+Compression sampling rate: 0
+Memtablerep: skip_list
+Perf Level: 1
+------------------------------------------------
+
+
+** Compaction Stats [default] **
+Level    Files   Size     Score Read(GB)  Rn(GB) Rnp1(GB) Write(GB) Wnew(GB) Moved(GB) W-Amp Rd(MB/s) Wr(MB/s) Comp(sec) CompMergeCPU(sec) Comp(cnt) Avg(sec) KeyIn KeyDrop Rblob(GB) Wblob(GB)
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  L2     10/0   634.49 MB   0.2      0.0     0.0      0.0       0.0      0.0       0.0   0.0      0.0      0.0      0.00              0.00         0    0.000       0      0       0.0       0.0
+ Sum     10/0   634.49 MB   0.0      0.0     0.0      0.0       0.0      0.0       0.0   0.0      0.0      0.0      0.00              0.00         0    0.000       0      0       0.0       0.0
+ Int      0/0    0.00 KB   0.0      0.0     0.0      0.0       0.0      0.0       0.0   0.0      0.0      0.0      0.00              0.00         0    0.000       0      0       0.0       0.0
+
+** Compaction Stats [default] **
+Priority    Files   Size     Score Read(GB)  Rn(GB) Rnp1(GB) Write(GB) Wnew(GB) Moved(GB) W-Amp Rd(MB/s) Wr(MB/s) Comp(sec) CompMergeCPU(sec) Comp(cnt) Avg(sec) KeyIn KeyDrop Rblob(GB) Wblob(GB)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Blob file count: 0, total size: 0.0 GB, garbage size: 0.0 GB, space amp: 0.0
+
+Uptime(secs): 0.0 total, 0.0 interval
+Flush(GB): cumulative 0.000, interval 0.000
+AddFile(GB): cumulative 0.000, interval 0.000
+AddFile(Total Files): cumulative 0, interval 0
+AddFile(L0 Files): cumulative 0, interval 0
+AddFile(Keys): cumulative 0, interval 0
+Cumulative compaction: 0.00 GB write, 0.00 MB/s write, 0.00 GB read, 0.00 MB/s read, 0.0 seconds
+Interval compaction: 0.00 GB write, 0.00 MB/s write, 0.00 GB read, 0.00 MB/s read, 0.0 seconds
+Write Stall (count): cf-l0-file-count-limit-delays-with-ongoing-compaction: 0, cf-l0-file-count-limit-stops-with-ongoing-compaction: 0, l0-file-count-limit-delays: 0, l0-file-count-limit-stops: 0, memtable-limit-delays: 0, memtable-limit-stops: 0, pending-compaction-bytes-delays: 0, pending-compaction-bytes-stops: 0, total-delays: 0, total-stops: 0
+
+Block cache LRUCache@0x55d4d85fd940#58321 capacity: 32.00 MB seed: 542101737 usage: 0.09 KB table_size: 1024 occupancy: 1 collections: 1 last_copies: 0 last_secs: 4.9e-05 secs_since: 0
+Block cache entry stats(count,size,portion): Misc(1,0.00 KB,0%)
+Block cache [default]  DataBlock(0.00 KB) FilterBlock(0.00 KB) IndexBlock(0.00 KB)
+
+** File Read Latency Histogram By Level [default] **
+** Level 2 read latency histogram (micros):
+Count: 50 Average: 55.6400  StdDev: 110.37
+Min: 0  Median: 1.7000  Max: 474
+Percentiles: P50: 1.70 P75: 20.50 P99: 474.00 P99.9: 474.00 P99.99: 474.00
+------------------------------------------------------
+[       0,       1 ]       18  36.000%  36.000% #######
+(       1,       2 ]       10  20.000%  56.000% ####
+(       2,       3 ]        2   4.000%  60.000% #
+(      10,      15 ]        2   4.000%  64.000% #
+(      15,      22 ]        7  14.000%  78.000% ###
+(      22,      34 ]        1   2.000%  80.000% 
+(      76,     110 ]        1   2.000%  82.000% 
+(     110,     170 ]        2   4.000%  86.000% #
+(     170,     250 ]        1   2.000%  88.000% 
+(     250,     380 ]        5  10.000%  98.000% ##
+(     380,     580 ]       
+AFTER Benchmark (stats): 0 OF 0
+
+BEFORE Benchmark (levelstats): 0 OF 0
+
+
+AFTER Benchmark (levelstats): 0 OF 0
+
+BEFORE Benchmark (memstats): 0 OF 0
+
+
+AFTER Benchmark (memstats): 0 OF 0
+
+BEFORE Benchmark (sstables): 0 OF 0
+
+
+AFTER Benchmark (sstables): 0 OF 0
+ 1   2.000% 100.000% 
+
+
+** DB Stats **
+Uptime(secs): 0.0 total, 0.0 interval
+Cumulative writes: 0 writes, 0 keys, 0 commit groups, 0.0 writes per commit group, ingest: 0.00 GB, 0.00 MB/s
+Cumulative WAL: 0 writes, 0 syncs, 0.00 writes per sync, written: 0.00 GB, 0.00 MB/s
+Cumulative stall: 00:00:0.000 H:M:S, 0.0 percent
+Interval writes: 0 writes, 0 keys, 0 commit groups, 0.0 writes per commit group, ingest: 0.00 MB, 0.00 MB/s
+Interval WAL: 0 writes, 0 syncs, 0.00 writes per sync, written: 0.00 GB, 0.00 MB/s
+Interval stall: 00:00:0.000 H:M:S, 0.0 percent
+Write Stall (count): write-buffer-manager-limit-stops: 0
+
+
+Level Files Size(MB)
+--------------------
+  0        0        0
+  1        0        0
+  2       10      634
+  3        0        0
+  4        0        0
+  5        0        0
+  6        0        0
+
+rocksdb.num-immutable-mem-table: 0
+rocksdb.cur-size-active-mem-table: 2048
+rocksdb.cur-size-all-mem-tables: 2048
+rocksdb.size-all-mem-tables: 2048
+rocksdb.num-entries-active-mem-table: 0
+rocksdb.num-entries-imm-mem-tables: 0
+
+--- level 0 --- version# 2 ---
+--- level 1 --- version# 2 ---
+--- level 2 --- version# 2 ---
+ 650:67352021[0 .. 0]['00000000000000003030303030303030' seq:0, type:1 .. '00000000000189123030303030303030' seq:0, type:1](0)
+ 651:67352095[0 .. 0]['00000000000189163030303030303030' seq:0, type:1 .. '00000000000315773030303030303030' seq:0, type:1](0)
+ 652:67350084[0 .. 0]['00000000000315783030303030303030' seq:0, type:1 .. '000000000004A1743030303030303030' seq:0, type:1](0)
+ 653:67348472[0 .. 0]['000000000004A1753030303030303030' seq:0, type:1 .. '0000000000062C6E3030303030303030' seq:0, type:1](0)
+ 654:67349810[0 .. 0]['0000000000062C713030303030303030' seq:0, type:1 .. '000000000007B9A93030303030303030' seq:0, type:1](0)
+ 655:67350502[0 .. 0]['000000000007B9AC3030303030303030' seq:0, type:1 .. '00000000000945F43030303030303030' seq:0, type:1](0)
+ 656:67351422[0 .. 0]['00000000000945F53030303030303030' seq:0, type:1 .. '00000000000AD1723030303030303030' seq:0, type:1](0)
+ 657:67352482[0 .. 0]['00000000000AD1733030303030303030' seq:0, type:1 .. '00000000000C5BE23030303030303030' seq:0, type:1](0)
+ 658:67351163[0 .. 0]['00000000000C5BE43030303030303030' seq:0, type:1 .. '00000000000DE6AC3030303030303030' seq:0, type:1](0)
+ 659:59151900[0 .. 0]['00000000000DE6AD3030303030303030' seq:0, type:1 .. '00000000000F423F3030303030303030' seq:0, type:1](0)
+--- level 3 --- version# 2 ---
+--- level 4 --- version# 2 ---
+--- level 5 --- version# 2 ---
+--- level 6 --- version# 2 ---
+
+STATISTICS:
+rocksdb.block.cache.miss COUNT : 0
+rocksdb.block.cache.hit COUNT : 0
+rocksdb.block.cache.add COUNT : 0
+rocksdb.block.cache.add.failures COUNT : 0
+rocksdb.block.cache.index.miss COUNT : 0
+rocksdb.block.cache.index.hit COUNT : 0
+rocksdb.block.cache.index.add COUNT : 0
+rocksdb.block.cache.index.bytes.insert COUNT : 0
+rocksdb.block.cache.filter.miss COUNT : 0
+rocksdb.block.cache.filter.hit COUNT : 0
+rocksdb.block.cache.filter.add COUNT : 0
+rocksdb.block.cache.filter.bytes.insert COUNT : 0
+rocksdb.block.cache.data.miss COUNT : 0
+rocksdb.block.cache.data.hit COUNT : 0
+rocksdb.block.cache.data.add COUNT : 0
+rocksdb.block.cache.data.bytes.insert COUNT : 0
+rocksdb.block.cache.bytes.read COUNT : 0
+rocksdb.block.cache.bytes.write COUNT : 0
+rocksdb.bloom.filter.useful COUNT : 0
+rocksdb.bloom.filter.full.positive COUNT : 0
+rocksdb.bloom.filter.full.true.positive COUNT : 0
+rocksdb.persistent.cache.hit COUNT : 0
+rocksdb.persistent.cache.miss COUNT : 0
+rocksdb.sim.block.cache.hit COUNT : 0
+rocksdb.sim.block.cache.miss COUNT : 0
+rocksdb.memtable.hit COUNT : 0
+rocksdb.memtable.miss COUNT : 0
+rocksdb.l0.hit COUNT : 0
+rocksdb.l1.hit COUNT : 0
+rocksdb.l2andup.hit COUNT : 0
+rocksdb.compaction.key.drop.new COUNT : 0
+rocksdb.compaction.key.drop.obsolete COUNT : 0
+rocksdb.compaction.key.drop.range_del COUNT : 0
+rocksdb.compaction.key.drop.user COUNT : 0
+rocksdb.compaction.range_del.drop.obsolete COUNT : 0
+rocksdb.compaction.optimized.del.drop.obsolete COUNT : 0
+rocksdb.compaction.cancelled COUNT : 0
+rocksdb.number.keys.written COUNT : 0
+rocksdb.number.keys.read COUNT : 0
+rocksdb.number.keys.updated COUNT : 0
+rocksdb.bytes.written COUNT : 0
+rocksdb.bytes.read COUNT : 0
+rocksdb.number.db.seek COUNT : 0
+rocksdb.number.db.next COUNT : 0
+rocksdb.number.db.prev COUNT : 0
+rocksdb.number.db.seek.found COUNT : 0
+rocksdb.number.db.next.found COUNT : 0
+rocksdb.number.db.prev.found COUNT : 0
+rocksdb.db.iter.bytes.read COUNT : 0
+rocksdb.no.file.opens COUNT : 10
+rocksdb.no.file.errors COUNT : 0
+rocksdb.stall.micros COUNT : 0
+rocksdb.db.mutex.wait.micros COUNT : 0
+rocksdb.number.multiget.get COUNT : 0
+rocksdb.number.multiget.keys.read COUNT : 0
+rocksdb.number.multiget.bytes.read COUNT : 0
+rocksdb.number.merge.failures COUNT : 0
+rocksdb.bloom.filter.prefix.checked COUNT : 0
+rocksdb.bloom.filter.prefix.useful COUNT : 0
+rocksdb.bloom.filter.prefix.true.positive COUNT : 0
+rocksdb.number.reseeks.iteration COUNT : 0
+rocksdb.getupdatessince.calls COUNT : 0
+rocksdb.wal.synced COUNT : 0
+rocksdb.wal.bytes COUNT : 0
+rocksdb.write.self COUNT : 0
+rocksdb.write.other COUNT : 0
+rocksdb.write.wal COUNT : 0
+rocksdb.compact.read.bytes COUNT : 0
+rocksdb.compact.write.bytes COUNT : 0
+rocksdb.flush.write.bytes COUNT : 0
+rocksdb.compact.read.marked.bytes COUNT : 0
+rocksdb.compact.read.periodic.bytes COUNT : 0
+rocksdb.compact.read.ttl.bytes COUNT : 0
+rocksdb.compact.write.marked.bytes COUNT : 0
+rocksdb.compact.write.periodic.bytes COUNT : 0
+rocksdb.compact.write.ttl.bytes COUNT : 0
+rocksdb.number.direct.load.table.properties COUNT : 0
+rocksdb.number.superversion_acquires COUNT : 0
+rocksdb.number.superversion_releases COUNT : 0
+rocksdb.number.superversion_cleanups COUNT : 0
+rocksdb.number.block.compressed COUNT : 0
+rocksdb.number.block.decompressed COUNT : 10
+rocksdb.number.block.not_compressed COUNT : 0
+rocksdb.merge.operation.time.nanos COUNT : 0
+rocksdb.filter.operation.time.nanos COUNT : 0
+rocksdb.row.cache.hit COUNT : 0
+rocksdb.row.cache.miss COUNT : 0
+rocksdb.read.amp.estimate.useful.bytes COUNT : 0
+rocksdb.read.amp.total.read.bytes COUNT : 0
+rocksdb.number.rate_limiter.drains COUNT : 0
+rocksdb.number.iter.skip COUNT : 0
+rocksdb.blobdb.num.put COUNT : 0
+rocksdb.blobdb.num.write COUNT : 0
+rocksdb.blobdb.num.get COUNT : 0
+rocksdb.blobdb.num.multiget COUNT : 0
+rocksdb.blobdb.num.seek COUNT : 0
+rocksdb.blobdb.num.next COUNT : 0
+rocksdb.blobdb.num.prev COUNT : 0
+rocksdb.blobdb.num.keys.written COUNT : 0
+rocksdb.blobdb.num.keys.read COUNT : 0
+rocksdb.blobdb.bytes.written COUNT : 0
+rocksdb.blobdb.bytes.read COUNT : 0
+rocksdb.blobdb.write.inlined COUNT : 0
+rocksdb.blobdb.write.inlined.ttl COUNT : 0
+rocksdb.blobdb.write.blob COUNT : 0
+rocksdb.blobdb.write.blob.ttl COUNT : 0
+rocksdb.blobdb.blob.file.bytes.written COUNT : 0
+rocksdb.blobdb.blob.file.bytes.read COUNT : 0
+rocksdb.blobdb.blob.file.synced COUNT : 0
+rocksdb.blobdb.blob.index.expired.count COUNT : 0
+rocksdb.blobdb.blob.index.expired.size COUNT : 0
+rocksdb.blobdb.blob.index.evicted.count COUNT : 0
+rocksdb.blobdb.blob.index.evicted.size COUNT : 0
+rocksdb.blobdb.gc.num.files COUNT : 0
+rocksdb.blobdb.gc.num.new.files COUNT : 0
+rocksdb.blobdb.gc.failures COUNT : 0
+rocksdb.blobdb.gc.num.keys.relocated COUNT : 0
+rocksdb.blobdb.gc.bytes.relocated COUNT : 0
+rocksdb.blobdb.fifo.num.files.evicted COUNT : 0
+rocksdb.blobdb.fifo.num.keys.evicted COUNT : 0
+rocksdb.blobdb.fifo.bytes.evicted COUNT : 0
+rocksdb.txn.overhead.mutex.prepare COUNT : 0
+rocksdb.txn.overhead.mutex.old.commit.map COUNT : 0
+rocksdb.txn.overhead.duplicate.key COUNT : 0
+rocksdb.txn.overhead.mutex.snapshot COUNT : 0
+rocksdb.txn.get.tryagain COUNT : 0
+rocksdb.number.multiget.keys.found COUNT : 0
+rocksdb.num.iterator.created COUNT : 0
+rocksdb.num.iterator.deleted COUNT : 0
+rocksdb.block.cache.compression.dict.miss COUNT : 0
+rocksdb.block.cache.compression.dict.hit COUNT : 0
+rocksdb.block.cache.compression.dict.add COUNT : 0
+rocksdb.block.cache.compression.dict.bytes.insert COUNT : 0
+rocksdb.block.cache.add.redundant COUNT : 0
+rocksdb.block.cache.index.add.redundant COUNT : 0
+rocksdb.block.cache.filter.add.redundant COUNT : 0
+rocksdb.block.cache.data.add.redundant COUNT : 0
+rocksdb.block.cache.compression.dict.add.redundant COUNT : 0
+rocksdb.files.marked.trash COUNT : 0
+rocksdb.files.marked.trash.deleted COUNT : 0
+rocksdb.files.deleted.immediately COUNT : 0
+rocksdb.error.handler.bg.error.count COUNT : 0
+rocksdb.error.handler.bg.errro.count COUNT : 0
+rocksdb.error.handler.bg.io.error.count COUNT : 0
+rocksdb.error.handler.bg.io.errro.count COUNT : 0
+rocksdb.error.handler.bg.retryable.io.error.count COUNT : 0
+rocksdb.error.handler.bg.retryable.io.errro.count COUNT : 0
+rocksdb.error.handler.autoresume.count COUNT : 0
+rocksdb.error.handler.autoresume.retry.total.count COUNT : 0
+rocksdb.error.handler.autoresume.success.count COUNT : 0
+rocksdb.memtable.payload.bytes.at.flush COUNT : 0
+rocksdb.memtable.garbage.bytes.at.flush COUNT : 0
+rocksdb.secondary.cache.hits COUNT : 0
+rocksdb.verify_checksum.read.bytes COUNT : 0
+rocksdb.backup.read.bytes COUNT : 0
+rocksdb.backup.write.bytes COUNT : 0
+rocksdb.remote.compact.read.bytes COUNT : 0
+rocksdb.remote.compact.write.bytes COUNT : 0
+rocksdb.hot.file.read.bytes COUNT : 0
+rocksdb.warm.file.read.bytes COUNT : 0
+rocksdb.cold.file.read.bytes COUNT : 0
+rocksdb.hot.file.read.count COUNT : 0
+rocksdb.warm.file.read.count COUNT : 0
+rocksdb.cold.file.read.count COUNT : 0
+rocksdb.last.level.read.bytes COUNT : 0
+rocksdb.last.level.read.count COUNT : 0
+rocksdb.non.last.level.read.bytes COUNT : 2355607
+rocksdb.non.last.level.read.count COUNT : 50
+rocksdb.last.level.seek.filtered COUNT : 0
+rocksdb.last.level.seek.filter.match COUNT : 0
+rocksdb.last.level.seek.data COUNT : 0
+rocksdb.last.level.seek.data.useful.no.filter COUNT : 0
+rocksdb.last.level.seek.data.useful.filter.match COUNT : 0
+rocksdb.non.last.level.seek.filtered COUNT : 0
+rocksdb.non.last.level.seek.filter.match COUNT : 0
+rocksdb.non.last.level.seek.data COUNT : 0
+rocksdb.non.last.level.seek.data.useful.no.filter COUNT : 0
+rocksdb.non.last.level.seek.data.useful.filter.match COUNT : 0
+rocksdb.block.checksum.compute.count COUNT : 30
+rocksdb.block.checksum.mismatch.count COUNT : 0
+rocksdb.multiget.coroutine.count COUNT : 0
+rocksdb.blobdb.cache.miss COUNT : 0
+rocksdb.blobdb.cache.hit COUNT : 0
+rocksdb.blobdb.cache.add COUNT : 0
+rocksdb.blobdb.cache.add.failures COUNT : 0
+rocksdb.blobdb.cache.bytes.read COUNT : 0
+rocksdb.blobdb.cache.bytes.write COUNT : 0
+rocksdb.read.async.micros COUNT : 0
+rocksdb.async.read.error.count COUNT : 0
+rocksdb.secondary.cache.filter.hits COUNT : 0
+rocksdb.secondary.cache.index.hits COUNT : 0
+rocksdb.secondary.cache.data.hits COUNT : 0
+rocksdb.table.open.prefetch.tail.miss COUNT : 0
+rocksdb.table.open.prefetch.tail.hit COUNT : 0
+rocksdb.timestamp.filter.table.checked COUNT : 0
+rocksdb.timestamp.filter.table.filtered COUNT : 0
+rocksdb.bytes.compressed.from COUNT : 0
+rocksdb.bytes.compressed.to COUNT : 0
+rocksdb.bytes.compression_bypassed COUNT : 0
+rocksdb.bytes.compression.rejected COUNT : 0
+rocksdb.number.block_compression_bypassed COUNT : 0
+rocksdb.number.block_compression_rejected COUNT : 0
+rocksdb.bytes.decompressed.from COUNT : 1790639
+rocksdb.bytes.decompressed.to COUNT : 3154255
+rocksdb.readahead.trimmed COUNT : 0
+rocksdb.db.get.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.write.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.compaction.times.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.compaction.times.cpu_micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.subcompaction.setup.times.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.table.sync.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.compaction.outfile.sync.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.wal.file.sync.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.manifest.file.sync.micros P50 : 3001.000000 P95 : 3001.000000 P99 : 3001.000000 P100 : 3001.000000 COUNT : 1 SUM : 3001
+rocksdb.table.open.io.micros P50 : 992.857143 P95 : 1114.000000 P99 : 1114.000000 P100 : 1114.000000 COUNT : 10 SUM : 8763
+rocksdb.db.multiget.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.read.block.compaction.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.read.block.get.micros P50 : 34.000000 P95 : 784.000000 P99 : 784.000000 P100 : 784.000000 COUNT : 20 SUM : 6513
+rocksdb.write.raw.block.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.numfiles.in.singlecompaction P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.seek.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.write.stall P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.sst.read.micros P50 : 1.700000 P95 : 341.000000 P99 : 474.000000 P100 : 474.000000 COUNT : 50 SUM : 2782
+rocksdb.file.read.flush.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.file.read.compaction.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.file.read.db.open.micros P50 : 1.700000 P95 : 341.000000 P99 : 474.000000 P100 : 474.000000 COUNT : 50 SUM : 2782
+rocksdb.file.read.get.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.file.read.multiget.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.file.read.db.iterator.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.file.read.verify.db.checksum.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.file.read.verify.file.checksums.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.num.subcompactions.scheduled P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.bytes.per.read P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.bytes.per.write P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.bytes.per.multiget P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.bytes.compressed P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.bytes.decompressed P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.compression.times.nanos P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.decompression.times.nanos P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.read.num.merge_operands P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.key.size P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.value.size P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.write.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.get.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.multiget.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.seek.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.next.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.prev.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.blob.file.write.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.blob.file.read.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.blob.file.sync.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.compression.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.blobdb.decompression.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.flush.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.sst.batch.size P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.num.index.and.filter.blocks.read.per.level P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.num.sst.read.per.level P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.error.handler.autoresume.retry.count P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.async.read.bytes P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.poll.wait.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.prefetched.bytes.discarded P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.multiget.io.batch.size P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.num.level.read.per.multiget P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.async.prefetch.abort.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.get.mem.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.wal.write.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.write_wait_for_wal.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.db.write_wait_mutex.micros P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+rocksdb.table.open.prefetch.tail.read.bytes P50 : 0.000000 P95 : 0.000000 P99 : 0.000000 P100 : 0.000000 COUNT : 0 SUM : 0
+
+PINNING STATISTICS:
+Pinned Memory=0
+Pinned Attempts=30
+Pinned Counter=0
+Active Counter=0
+

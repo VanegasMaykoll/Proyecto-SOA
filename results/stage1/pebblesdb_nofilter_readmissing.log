@@ -1,0 +1,55 @@
+LevelDB:    version 1.17
+Date:       Fri Jul 24 21:24:54 2026
+CPU:        16 * 12th Gen Intel(R) Core(TM) i5-12600KF
+CPUCache:   20480 KB
+... finished 100 ops                              ... finished 200 ops                              ... finished 300 ops                              ... finished 400 ops                              ... finished 500 ops                              ... finished 600 ops                              ... finished 700 ops                              ... finished 800 ops                              ... finished 900 ops                              ... finished 1000 ops                              ... finished 1500 ops                              ... finished 2000 ops                              ... finished 2500 ops                              ... finished 3000 ops                              ... finished 3500 ops                              ... finished 4000 ops                              ... finished 4500 ops                              ... finished 5000 ops                              ... finished 6000 ops                              ... finished 7000 ops                              ... finished 8000 ops                              ... finished 9000 ops                              ... finished 10000 ops                              ... finished 15000 ops                              ... finished 20000 ops                              ... finished 25000 ops                              ... finished 30000 ops                              ... finished 35000 ops                              ... finished 40000 ops                              ... finished 45000 ops                              ... finished 50000 ops                              ... finished 60000 ops                              ... finished 70000 ops                              ... finished 80000 ops                              ... finished 90000 ops                              ... finished 100000 ops                              ... finished 150000 ops                              ... finished 200000 ops                              ... finished 250000 ops                              ... finished 300000 ops                              ... finished 350000 ops                              ... finished 400000 ops                              ... finished 450000 ops                              ... finished 500000 ops                              ... finished 600000 ops                              ... finished 700000 ops                              ... finished 800000 ops                              ... finished 900000 ops                              ... finished 1000000 ops                              Keys:       16 bytes each
+Values:     1024 bytes each (1024 bytes after compression)
+Entries:    1000000
+RawSize:    991.8 MB (estimated)
+FileSize:   991.8 MB (estimated)
+------------------------------------------------
+readmissing  :       0.386 micros/op;
+Microseconds per op:
+Count: 1000000  Average: 0.3856  StdDev: 5.07
+Min: 0.0000  Median: 0.7025  Max: 3493.0000
+------------------------------------------------------
+[       0,       1 )  711700  71.170%  71.170% ##############
+[       1,       2 )  218281  21.828%  92.998% ####
+[       2,       3 )   60611   6.061%  99.059% #
+[       3,       4 )    7152   0.715%  99.774% 
+[       4,       5 )     912   0.091%  99.866% 
+[       5,       6 )     290   0.029%  99.895% 
+[       6,       7 )     166   0.017%  99.911% 
+[       7,       8 )     127   0.013%  99.924% 
+[       8,       9 )     117   0.012%  99.936% 
+[       9,      10 )     132   0.013%  99.949% 
+[      10,      12 )     150   0.015%  99.964% 
+[      12,      14 )     160   0.016%  99.980% 
+[      14,      16 )     111   0.011%  99.991% 
+[      16,      18 )      12   0.001%  99.992% 
+[      18,      20 )       7   0.001%  99.993% 
+[      20,      25 )      11   0.001%  99.994% 
+[      25,      30 )      56   0.006% 100.000% 
+[      30,      35 )       1   0.000% 100.000% 
+[      35,      40 )       1   0.000% 100.000% 
+[    1400,    1600 )       1   0.000% 100.000% 
+[    3000,    3500 )       2   0.000% 100.000% 
+
+-------------------------- Timer information ----------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 0 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 1 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 2 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 3 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Cumulative static timer information --------------------
+
+-------------------------------------------------------------------

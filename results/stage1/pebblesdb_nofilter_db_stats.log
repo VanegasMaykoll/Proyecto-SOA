@@ -1,0 +1,287 @@
+LevelDB:    version 1.17
+Date:       Fri Jul 24 21:24:55 2026
+CPU:        16 * 12th Gen Intel(R) Core(TM) i5-12600KF
+CPUCache:   20480 KB
+Keys:       16 bytes each
+Values:     1024 bytes each (1024 bytes after compression)
+Entries:    1000000
+RawSize:    991.8 MB (estimated)
+FileSize:   991.8 MB (estimated)
+------------------------------------------------
+
+                               Compactions
+Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
+--------------------------------------------------
+  6        3      634         0        0         0
+
+
+--------------------- level 0 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 0
+ num_complete_guard_files_in_level: 0
+--------------------- level 1 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 0
+ num_complete_guard_files_in_level: 0
+--------------------- level 2 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 0
+ num_complete_guard_files_in_level: 0
+--------------------- level 3 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 0
+ num_complete_guard_files_in_level: 0
+--------------------- level 4 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 2
+ num_guard_files_in_level: 0
+ guard_key: '0000000000219705' @ 713766 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000502786' @ 1981824 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ ------ Complete Guards ------
+ num_guards: 2
+ num_complete_guard_files_in_level: 0
+--------------------- level 5 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 4
+ num_guard_files_in_level: 0
+ guard_key: '0000000000219705' @ 713767 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000326588' @ 883874 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000421681' @ 1427196 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000502786' @ 1981825 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ ------ Complete Guards ------
+ num_guards: 4
+ num_complete_guard_files_in_level: 0
+--------------------- level 6 ---------------------
+ compaction_score_of_level: 0.333333
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 665169383
+ ------ Files ------
+ num_files: 3
+ 672:270815560['0000000000000000' @ 511659 : 1 .. '0000000000407231' @ 155635 : 1]
+ 673:270815739['0000000000407235' @ 1144467 : 1 .. '0000000000814078' @ 1840091 : 1]
+ 674:123538084['0000000000814080' @ 1190987 : 1 .. '0000000000999999' @ 590375 : 1]
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 24
+ num_guard_files_in_level: 3
+ guard_key: '0000000000007665' @ 249526 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000157521' @ 706768 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000219705' @ 713768 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000269169' @ 1373004 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000306476' @ 1170172 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000326588' @ 883875 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000000000' @ 511659 : 1 .. '0000000000407231' @ 155635 : 1]
+ num_segments: 1
+ files: [672]
+ guard_key: '0000000000421681' @ 1427197 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000446034' @ 66708 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000502786' @ 1981826 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000625218' @ 92576 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000716523' @ 286486 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000732422' @ 464460 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000756014' @ 1052998 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000781439' @ 610112 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000407235' @ 1144467 : 1 .. '0000000000814078' @ 1840091 : 1]
+ num_segments: 1
+ files: [673]
+ guard_key: '0000000000854148' @ 268544 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000862686' @ 1898338 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000868870' @ 887368 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000871388' @ 1297350 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000909577' @ 699896 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000939966' @ 63832 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000946967' @ 1250994 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000953824' @ 1418886 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000980731' @ 1696850 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000991114' @ 106286 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000814080' @ 1190987 : 1 .. '0000000000999999' @ 590375 : 1]
+ num_segments: 1
+ files: [674]
+ ------ Complete Guards ------
+ num_guards: 24
+ num_complete_guard_files_in_level: 0
+
+-------------------------- Timer information ----------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 0 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 1 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 2 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 3 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Cumulative static timer information --------------------
+
+-------------------------------------------------------------------

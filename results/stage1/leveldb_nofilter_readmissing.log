@@ -1,0 +1,46 @@
+LevelDB:    version 1.23
+Date:       Fri Jul 24 21:04:22 2026
+CPU:        16 * 12th Gen Intel(R) Core(TM) i5-12600KF
+CPUCache:   20480 KB
+... finished 100 ops                              ... finished 200 ops                              ... finished 300 ops                              ... finished 400 ops                              ... finished 500 ops                              ... finished 600 ops                              ... finished 700 ops                              ... finished 800 ops                              ... finished 900 ops                              ... finished 1000 ops                              ... finished 1500 ops                              ... finished 2000 ops                              ... finished 2500 ops                              ... finished 3000 ops                              ... finished 3500 ops                              ... finished 4000 ops                              ... finished 4500 ops                              ... finished 5000 ops                              ... finished 6000 ops                              ... finished 7000 ops                              ... finished 8000 ops                              ... finished 9000 ops                              ... finished 10000 ops                              ... finished 15000 ops                              ... finished 20000 ops                              ... finished 25000 ops                              ... finished 30000 ops                              ... finished 35000 ops                              ... finished 40000 ops                              ... finished 45000 ops                              ... finished 50000 ops                              ... finished 60000 ops                              ... finished 70000 ops                              ... finished 80000 ops                              ... finished 90000 ops                              ... finished 100000 ops                              ... finished 150000 ops                              ... finished 200000 ops                              ... finished 250000 ops                              ... finished 300000 ops                              ... finished 350000 ops                              ... finished 400000 ops                              ... finished 450000 ops                              ... finished 500000 ops                              ... finished 600000 ops                              ... finished 700000 ops                              ... finished 800000 ops                              ... finished 900000 ops                              ... finished 1000000 ops                              Keys:       16 bytes each
+Values:     1024 bytes each (1024 bytes after compression)
+Entries:    1000000
+RawSize:    991.8 MB (estimated)
+FileSize:   991.8 MB (estimated)
+------------------------------------------------
+readmissing  :       0.976 micros/op;
+Microseconds per op:
+Count: 1000000  Average: 0.9756  StdDev: 1.28
+Min: 0.0000  Median: 1.4621  Max: 228.0000
+------------------------------------------------------
+[       0,       1 )   98674   9.867%   9.867% ##
+[       1,       2 )  868441  86.844%  96.712% #################
+[       2,       3 )   22999   2.300%  99.011% 
+[       3,       4 )    5988   0.599%  99.610% 
+[       4,       5 )    1967   0.197%  99.807% 
+[       5,       6 )     621   0.062%  99.869% 
+[       6,       7 )     190   0.019%  99.888% 
+[       7,       8 )      82   0.008%  99.896% 
+[       8,       9 )      51   0.005%  99.901% 
+[       9,      10 )      23   0.002%  99.904% 
+[      10,      12 )      27   0.003%  99.906% 
+[      12,      14 )      69   0.007%  99.913% 
+[      14,      16 )     317   0.032%  99.945% 
+[      16,      18 )      24   0.002%  99.947% 
+[      18,      20 )      10   0.001%  99.948% 
+[      20,      25 )      28   0.003%  99.951% 
+[      25,      30 )     227   0.023%  99.974% 
+[      30,      35 )      27   0.003%  99.977% 
+[      35,      40 )      20   0.002%  99.979% 
+[      40,      45 )      17   0.002%  99.980% 
+[      45,      50 )      18   0.002%  99.982% 
+[      50,      60 )      28   0.003%  99.985% 
+[      60,      70 )      15   0.002%  99.986% 
+[      70,      80 )      41   0.004%  99.990% 
+[      80,      90 )      78   0.008%  99.998% 
+[      90,     100 )      14   0.001% 100.000% 
+[     100,     120 )       2   0.000% 100.000% 
+[     120,     140 )       1   0.000% 100.000% 
+[     200,     250 )       1   0.000% 100.000% 
+
+Comparisons: 23868025

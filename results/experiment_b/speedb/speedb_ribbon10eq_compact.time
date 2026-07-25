@@ -1,0 +1,23 @@
+	Command being timed: "/home/maykoll_vanegas/kv_engines_clean/bin/speedb_db_bench --benchmarks=compact --use_existing_db=1 --num=1000000 --value_size=1024 --threads=1 --cache_size=33554432 --write_buffer_size=4194304 --compression_type=snappy --compression_ratio=1.0 --bloom_bits=10 --use_ribbon_filter=1 --whole_key_filtering=1 --memtable_bloom_size_ratio=0 --memtablerep=skip_list --enable_speedb_features=0 --use_spdb_writes=0 --seed=20260724 --statistics=1 --stats_level=3 --perf_level=2 --db=/home/maykoll_vanegas/kv_engines_clean/data/experiment_b/speedb/speedb_ribbon10eq"
+	User time (seconds): 0.98
+	System time (seconds): 0.68
+	Percent of CPU this job got: 89%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.87
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 23252
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 18966
+	Voluntary context switches: 18729
+	Involuntary context switches: 18
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 2430744
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

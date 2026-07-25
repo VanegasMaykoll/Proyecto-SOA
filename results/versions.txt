@@ -1,0 +1,15 @@
+=== LevelDB ===
+1.23
+99b3c03b3284f5886f9ef9a4ef703d57373e61be
+
+=== PebblesDB ===
+v1.0
+09c706d7aa2977c1316b2d64b81f1f1b6508002d
+
+=== RocksDB ===
+v8.6.7
+cb7a5e02edeb883193eb5b4901d5943f58e9add9
+
+=== Speedb ===
+speedb/v2.8.0
+c328f0ebc33db0166cd2a2844ff44c8034e30e5b

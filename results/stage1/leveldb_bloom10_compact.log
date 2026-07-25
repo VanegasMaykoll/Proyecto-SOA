@@ -1,0 +1,11 @@
+LevelDB:    version 1.23
+Date:       Fri Jul 24 21:04:47 2026
+CPU:        16 * 12th Gen Intel(R) Core(TM) i5-12600KF
+CPUCache:   20480 KB
+Keys:       16 bytes each
+Values:     1024 bytes each (1024 bytes after compression)
+Entries:    1000000
+RawSize:    991.8 MB (estimated)
+FileSize:   991.8 MB (estimated)
+------------------------------------------------
+compact      : 5305713.000 micros/op;

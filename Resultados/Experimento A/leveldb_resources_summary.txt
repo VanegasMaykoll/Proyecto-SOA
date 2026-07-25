@@ -1,0 +1,48 @@
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_compact.time:	User time (seconds): 1.27
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_compact.time:	System time (seconds): 1.20
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_compact.time:	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:05.36
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_compact.time:	Maximum resident set size (kbytes): 100388
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_compact.time:	File system inputs: 0
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_compact.time:	File system outputs: 2864648
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_fillrandom.time:	User time (seconds): 6.34
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_fillrandom.time:	System time (seconds): 5.93
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_fillrandom.time:	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:22.70
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_fillrandom.time:	Maximum resident set size (kbytes): 93720
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_fillrandom.time:	File system inputs: 0
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_fillrandom.time:	File system outputs: 14709136
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readmissing.time:	User time (seconds): 0.58
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readmissing.time:	System time (seconds): 0.00
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readmissing.time:	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.62
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readmissing.time:	Maximum resident set size (kbytes): 50144
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readmissing.time:	File system inputs: 0
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readmissing.time:	File system outputs: 56
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readrandom.time:	User time (seconds): 1.16
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readrandom.time:	System time (seconds): 0.04
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readrandom.time:	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.23
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readrandom.time:	Maximum resident set size (kbytes): 662424
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readrandom.time:	File system inputs: 0
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_bloom10_readrandom.time:	File system outputs: 56
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_compact.time:	User time (seconds): 1.40
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_compact.time:	System time (seconds): 1.34
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_compact.time:	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:05.71
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_compact.time:	Maximum resident set size (kbytes): 97524
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_compact.time:	File system inputs: 0
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_compact.time:	File system outputs: 2811232
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_fillrandom.time:	User time (seconds): 5.94
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_fillrandom.time:	System time (seconds): 5.78
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_fillrandom.time:	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:22.02
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_fillrandom.time:	Maximum resident set size (kbytes): 93744
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_fillrandom.time:	File system inputs: 0
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_fillrandom.time:	File system outputs: 14738264
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readmissing.time:	User time (seconds): 0.94
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readmissing.time:	System time (seconds): 0.04
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readmissing.time:	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.02
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readmissing.time:	Maximum resident set size (kbytes): 658932
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readmissing.time:	File system inputs: 0
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readmissing.time:	File system outputs: 56
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readrandom.time:	User time (seconds): 1.07
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readrandom.time:	System time (seconds): 0.04
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readrandom.time:	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.15
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readrandom.time:	Maximum resident set size (kbytes): 659412
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readrandom.time:	File system inputs: 0
+/home/maykoll_vanegas/kv_engines_clean/results/stage1/leveldb_nofilter_readrandom.time:	File system outputs: 56
