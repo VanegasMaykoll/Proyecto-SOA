@@ -1,0 +1,23 @@
+	Command being timed: "/mnt/c/Users/Elsie/Documents/ProyectoSOAGithubMaykoll/Proyecto-SOA/engines/leveldb-1.23/build/db_bench --benchmarks=fillrandom --num=1000000 --value_size=1024 --threads=1 --cache_size=33554432 --write_buffer_size=4194304 --compression_ratio=1.0 --bloom_bits=10 --use_ribbon_filter=1 --histogram=1 --db=/mnt/c/Users/Elsie/Documents/ProyectoSOAGithubMaykoll/Proyecto-SOA/data/experiment_b/leveldb/leveldb_ribbon10eq"
+	User time (seconds): 120.50
+	System time (seconds): 135.79
+	Percent of CPU this job got: 9%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 44:20.75
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 108524
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 93589
+	Minor (reclaiming a frame) page faults: 77329
+	Voluntary context switches: 3079797
+	Involuntary context switches: 108
+	Swaps: 0
+	File system inputs: 10355792
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

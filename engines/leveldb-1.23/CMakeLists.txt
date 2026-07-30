@@ -172,6 +172,7 @@ target_sources(leveldb
     "util/arena.cc"
     "util/arena.h"
     "util/bloom.cc"
+    "util/ribbon_filter.cc"
     "util/cache.cc"
     "util/coding.cc"
     "util/coding.h"

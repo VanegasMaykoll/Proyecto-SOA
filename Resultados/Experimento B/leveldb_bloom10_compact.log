@@ -1,0 +1,11 @@
+LevelDB:    version 1.23
+Date:       Thu Jul 30 08:53:43 2026
+CPU:        32 * 13th Gen Intel(R) Core(TM) i9-13980HX
+CPUCache:   36864 KB
+Keys:       16 bytes each
+Values:     1024 bytes each (1024 bytes after compression)
+Entries:    1000000
+RawSize:    991.8 MB (estimated)
+FileSize:   991.8 MB (estimated)
+------------------------------------------------
+compact      : 368160796.000 micros/op;
