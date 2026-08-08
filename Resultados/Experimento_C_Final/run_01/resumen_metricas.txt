@@ -1,0 +1,226 @@
+============================================================
+ EXPERIMENTO C - PEBBLESDB - RESUMEN FINAL
+============================================================
+
+------------------------------------------------------------
+VARIANTE: nofilter
+------------------------------------------------------------
+
+[01_fillrandom.log]
+Filter:     none
+fillrandom   :       8.260 micros/op;  120.1 MB/s
+	Command being timed: "./db_bench --benchmarks=fillrandom --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=-1 --use_ribbon_filter=0 --use_xor_filter=0 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/nofilter/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:08.33
+	Maximum resident set size (kbytes): 29916
+	File system inputs: 0
+	File system outputs: 13279648
+	Exit status: 0
+
+[02_readrandom_validation.log]
+Filter:     none
+readrandom   :       3.518 micros/op; (1000000 of 1000000 found)
+	Command being timed: "./db_bench --benchmarks=readrandom --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=-1 --use_ribbon_filter=0 --use_xor_filter=0 --use_existing_db=1 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/nofilter/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.61
+	Maximum resident set size (kbytes): 52600
+	File system inputs: 0
+	File system outputs: 1732968
+	Exit status: 0
+
+[03_readmissing.log]
+Filter:     none
+readmissing  :       4.317 micros/op;
+	Command being timed: "./db_bench --benchmarks=readmissing --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=-1 --use_ribbon_filter=0 --use_xor_filter=0 --use_existing_db=1 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/nofilter/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:04.41
+	Maximum resident set size (kbytes): 47024
+	File system inputs: 0
+	File system outputs: 32
+	Exit status: 0
+
+[04_readrandom.log]
+Filter:     none
+readrandom   :       2.797 micros/op; (1000000 of 1000000 found)
+	Command being timed: "./db_bench --benchmarks=readrandom --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=-1 --use_ribbon_filter=0 --use_xor_filter=0 --use_existing_db=1 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/nofilter/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.86
+	Maximum resident set size (kbytes): 46972
+	File system inputs: 0
+	File system outputs: 32
+	Exit status: 0
+
+DB bytes after fillrandom: 932666345
+DB bytes final: 817596875
+
+------------------------------------------------------------
+VARIANTE: bloom
+------------------------------------------------------------
+
+[01_fillrandom.log]
+Filter:     leveldb.BuiltinBloomFilter
+FilterMode: Bloom
+FilterBits: 10 physical bits/key
+fillrandom   :       8.581 micros/op;  115.6 MB/s
+	Command being timed: "./db_bench --benchmarks=fillrandom --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=10 --use_ribbon_filter=0 --use_xor_filter=0 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/bloom/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:08.65
+	Maximum resident set size (kbytes): 44456
+	File system inputs: 0
+	File system outputs: 13372448
+	Exit status: 0
+
+[02_readrandom_validation.log]
+Filter:     leveldb.BuiltinBloomFilter
+FilterMode: Bloom
+FilterBits: 10 physical bits/key
+readrandom   :       2.661 micros/op; (1000000 of 1000000 found)
+	Command being timed: "./db_bench --benchmarks=readrandom --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=10 --use_ribbon_filter=0 --use_xor_filter=0 --use_existing_db=1 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/bloom/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.01
+	Maximum resident set size (kbytes): 98012
+	File system inputs: 0
+	File system outputs: 1190112
+	Exit status: 0
+
+[03_readmissing.log]
+Filter:     leveldb.BuiltinBloomFilter
+FilterMode: Bloom
+FilterBits: 10 physical bits/key
+readmissing  :       0.413 micros/op;
+	Command being timed: "./db_bench --benchmarks=readmissing --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=10 --use_ribbon_filter=0 --use_xor_filter=0 --use_existing_db=1 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/bloom/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.72
+	Maximum resident set size (kbytes): 84340
+	File system inputs: 0
+	File system outputs: 40
+	Exit status: 0
+
+[04_readrandom.log]
+Filter:     leveldb.BuiltinBloomFilter
+FilterMode: Bloom
+FilterBits: 10 physical bits/key
+readrandom   :       2.448 micros/op; (1000000 of 1000000 found)
+	Command being timed: "./db_bench --benchmarks=readrandom --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=10 --use_ribbon_filter=0 --use_xor_filter=0 --use_existing_db=1 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/bloom/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.77
+	Maximum resident set size (kbytes): 84320
+	File system inputs: 0
+	File system outputs: 40
+	Exit status: 0
+
+DB bytes after fillrandom: 896268382
+DB bytes final: 837166646
+
+------------------------------------------------------------
+VARIANTE: ribbon
+------------------------------------------------------------
+
+[01_fillrandom.log]
+Filter:     proyecto-soa.RibbonFilter64Packed.v1
+FilterMode: Ribbon
+FilterBits: 10 Bloom-equivalent bits/key
+fillrandom   :       9.481 micros/op;  104.6 MB/s
+	Command being timed: "./db_bench --benchmarks=fillrandom --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=10 --use_ribbon_filter=1 --use_xor_filter=0 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/ribbon/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:09.55
+	Maximum resident set size (kbytes): 47676
+	File system inputs: 0
+	File system outputs: 13132336
+	Exit status: 0
+
+[02_readrandom_validation.log]
+Filter:     proyecto-soa.RibbonFilter64Packed.v1
+FilterMode: Ribbon
+FilterBits: 10 Bloom-equivalent bits/key
+readrandom   :       2.964 micros/op; (1000000 of 1000000 found)
+	Command being timed: "./db_bench --benchmarks=readrandom --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=10 --use_ribbon_filter=1 --use_xor_filter=0 --use_existing_db=1 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/ribbon/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.52
+	Maximum resident set size (kbytes): 104420
+	File system inputs: 0
+	File system outputs: 961824
+	Exit status: 0
+
+[03_readmissing.log]
+Filter:     proyecto-soa.RibbonFilter64Packed.v1
+FilterMode: Ribbon
+FilterBits: 10 Bloom-equivalent bits/key
+readmissing  :       0.875 micros/op;
+	Command being timed: "./db_bench --benchmarks=readmissing --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=10 --use_ribbon_filter=1 --use_xor_filter=0 --use_existing_db=1 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/ribbon/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.37
+	Maximum resident set size (kbytes): 87564
+	File system inputs: 0
+	File system outputs: 32
+	Exit status: 0
+
+[04_readrandom.log]
+Filter:     proyecto-soa.RibbonFilter64Packed.v1
+FilterMode: Ribbon
+FilterBits: 10 Bloom-equivalent bits/key
+readrandom   :       2.715 micros/op; (1000000 of 1000000 found)
+	Command being timed: "./db_bench --benchmarks=readrandom --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=10 --use_ribbon_filter=1 --use_xor_filter=0 --use_existing_db=1 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/ribbon/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.22
+	Maximum resident set size (kbytes): 87628
+	File system inputs: 0
+	File system outputs: 32
+	Exit status: 0
+
+DB bytes after fillrandom: 937543880
+DB bytes final: 852114634
+
+------------------------------------------------------------
+VARIANTE: xor
+------------------------------------------------------------
+
+[01_fillrandom.log]
+Filter:     proyecto-soa.XorFilter3Packed.v1
+FilterMode: Xor
+FilterBits: 10 precision target
+fillrandom   :       8.849 micros/op;  112.1 MB/s
+	Command being timed: "./db_bench --benchmarks=fillrandom --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=10 --use_ribbon_filter=0 --use_xor_filter=1 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/xor/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:08.93
+	Maximum resident set size (kbytes): 46840
+	File system inputs: 0
+	File system outputs: 13143744
+	Exit status: 0
+
+[02_readrandom_validation.log]
+Filter:     proyecto-soa.XorFilter3Packed.v1
+FilterMode: Xor
+FilterBits: 10 precision target
+readrandom   :       2.680 micros/op; (1000000 of 1000000 found)
+	Command being timed: "./db_bench --benchmarks=readrandom --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=10 --use_ribbon_filter=0 --use_xor_filter=1 --use_existing_db=1 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/xor/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:03.13
+	Maximum resident set size (kbytes): 104404
+	File system inputs: 0
+	File system outputs: 968464
+	Exit status: 0
+
+[03_readmissing.log]
+Filter:     proyecto-soa.XorFilter3Packed.v1
+FilterMode: Xor
+FilterBits: 10 precision target
+readmissing  :       0.462 micros/op;
+	Command being timed: "./db_bench --benchmarks=readmissing --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=10 --use_ribbon_filter=0 --use_xor_filter=1 --use_existing_db=1 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/xor/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.87
+	Maximum resident set size (kbytes): 87144
+	File system inputs: 0
+	File system outputs: 32
+	Exit status: 0
+
+[04_readrandom.log]
+Filter:     proyecto-soa.XorFilter3Packed.v1
+FilterMode: Xor
+FilterBits: 10 precision target
+readrandom   :       2.464 micros/op; (1000000 of 1000000 found)
+	Command being timed: "./db_bench --benchmarks=readrandom --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=10 --use_ribbon_filter=0 --use_xor_filter=1 --use_existing_db=1 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/xor/database/db"
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:02.87
+	Maximum resident set size (kbytes): 87156
+	File system inputs: 0
+	File system outputs: 32
+	Exit status: 0
+
+DB bytes after fillrandom: 949676392
+DB bytes final: 852911659
+
+============================================================
+VALIDACION DE CORRECCION
+============================================================
+nofilter   : OK - 1000000/1000000
+bloom      : OK - 1000000/1000000
+ribbon     : OK - 1000000/1000000
+xor        : OK - 1000000/1000000
+
+Resumen guardado en:
+/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/resumen_metricas.txt

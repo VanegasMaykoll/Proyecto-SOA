@@ -1,0 +1,321 @@
+LevelDB:    version 1.17
+Date:       Fri Aug  7 20:08:17 2026
+CPU:        16 * 12th Gen Intel(R) Core(TM) i5-12600KF
+CPUCache:   20480 KB
+Keys:       16 bytes each
+Values:     1024 bytes each (1024 bytes after compression)
+Entries:    1000000
+RawSize:    991.8 MB (estimated)
+FileSize:   991.8 MB (estimated)
+Filter:     none
+------------------------------------------------
+
+                               Compactions
+Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
+--------------------------------------------------
+  4        2       90         0        0         0
+  5        7      422         0        0         0
+  6       15      268         0        0         0
+
+
+--------------------- level 0 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 0
+ num_complete_guard_files_in_level: 0
+--------------------- level 1 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 0
+ num_complete_guard_files_in_level: 0
+--------------------- level 2 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 0
+ num_complete_guard_files_in_level: 0
+--------------------- level 3 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 0
+ num_complete_guard_files_in_level: 0
+--------------------- level 4 ---------------------
+ compaction_score_of_level: 0.666667
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 93883411
+ ------ Files ------
+ num_files: 2
+ 643:67706294['0000000000219705' @ 1741949 : 1 .. '0000000000424321' @ 1362033 : 1]
+ 644:26177117['0000000000424324' @ 1344887 : 1 .. '0000000000502784' @ 1992117 : 1]
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 2
+ num_guard_files_in_level: 2
+ guard_key: '0000000000219705' @ 713766 : 1
+ guard_compaction_score: 0.666667
+ guard_range: ['0000000000219705' @ 1741949 : 1 .. '0000000000502784' @ 1992117 : 1]
+ num_segments: 2
+ files: [643,644]
+ guard_key: '0000000000502786' @ 1981824 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ ------ Complete Guards ------
+ num_guards: 2
+ num_complete_guard_files_in_level: 0
+--------------------- level 5 ---------------------
+ compaction_score_of_level: 0.666667
+ sentinel_compaction_score_of_level: 0.666667
+ total file size in this level: 442836022
+ ------ Files ------
+ num_files: 7
+ 648:124678506['0000000000000000' @ 511659 : 1 .. '0000000000219704' @ 877549 : 1]
+ 238:46792579['0000000000000003' @ 328443 : 1 .. '0000000000219703' @ 254063 : 1]
+ 355:38261310['0000000000219705' @ 713765 : 1 .. '0000000000326584' @ 271727 : 1]
+ 481:20912072['0000000000219721' @ 995447 : 1 .. '0000000000326584' @ 1058573 : 1]
+ 488:46683241['0000000000326588' @ 883873 : 1 .. '0000000000421680' @ 851107 : 1]
+ 649:135408934['0000000000502786' @ 1981823 : 1 .. '0000000000909709' @ 1348401 : 1]
+ 650:30099380['0000000000909711' @ 1857785 : 1 .. '0000000000999997' @ 1352683 : 1]
+ ------ Sentinel files ------
+ num_sentinel_files: 2
+ 648:124678506['0000000000000000' @ 511659 : 1 .. '0000000000219704' @ 877549 : 1]
+ 238:46792579['0000000000000003' @ 328443 : 1 .. '0000000000219703' @ 254063 : 1]
+ ------ Guards ------
+ num_guards: 4
+ num_guard_files_in_level: 5
+ guard_key: '0000000000219705' @ 713767 : 1
+ guard_compaction_score: 0.666667
+ guard_range: ['0000000000219705' @ 713765 : 1 .. '0000000000326584' @ 271727 : 1]
+ num_segments: 2
+ files: [355,481]
+ guard_key: '0000000000326588' @ 883874 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000326588' @ 883873 : 1 .. '0000000000421680' @ 851107 : 1]
+ num_segments: 1
+ files: [488]
+ guard_key: '0000000000421681' @ 1427196 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000502786' @ 1981825 : 1
+ guard_compaction_score: 0.666667
+ guard_range: ['0000000000502786' @ 1981823 : 1 .. '0000000000999997' @ 1352683 : 1]
+ num_segments: 2
+ files: [649,650]
+ ------ Complete Guards ------
+ num_guards: 4
+ num_complete_guard_files_in_level: 0
+--------------------- level 6 ---------------------
+ compaction_score_of_level: 0.333333
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 280868803
+ ------ Files ------
+ num_files: 15
+ 511:11770642['0000000000421683' @ 225131 : 1 .. '0000000000446032' @ 973333 : 1]
+ 516:87172986['0000000000446034' @ 66707 : 1 .. '0000000000625217' @ 785289 : 1]
+ 531:44590204['0000000000625218' @ 92575 : 1 .. '0000000000716522' @ 946435 : 1]
+ 532:7794937['0000000000716523' @ 940937 : 1 .. '0000000000732421' @ 321003 : 1]
+ 533:11358727['0000000000732422' @ 464459 : 1 .. '0000000000756013' @ 982407 : 1]
+ 534:12299415['0000000000756014' @ 1052997 : 1 .. '0000000000781436' @ 104395 : 1]
+ 535:35327335['0000000000781439' @ 1160783 : 1 .. '0000000000854147' @ 425405 : 1]
+ 538:7113393['0000000000854148' @ 1163339 : 1 .. '0000000000868868' @ 91809 : 1]
+ 539:1179628['0000000000868870' @ 887367 : 1 .. '0000000000871387' @ 163521 : 1]
+ 540:18458865['0000000000871391' @ 614757 : 1 .. '0000000000909575' @ 484383 : 1]
+ 541:14771825['0000000000909577' @ 699895 : 1 .. '0000000000939962' @ 981249 : 1]
+ 542:3411622['0000000000939966' @ 844575 : 1 .. '0000000000946966' @ 272959 : 1]
+ 543:3349463['0000000000946969' @ 516991 : 1 .. '0000000000953822' @ 732875 : 1]
+ 544:17976441['0000000000953826' @ 166797 : 1 .. '0000000000991113' @ 809291 : 1]
+ 545:4293320['0000000000991114' @ 106285 : 1 .. '0000000000999999' @ 590375 : 1]
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 21
+ num_guard_files_in_level: 15
+ guard_key: '0000000000007665' @ 249526 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000157521' @ 706768 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000219705' @ 713768 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000269169' @ 1373004 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000306476' @ 1170172 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000326588' @ 883875 : 1
+ guard_compaction_score: 0.000000
+ guard_range: [(bad) .. (bad)]
+ num_segments: 0
+ files: []
+ guard_key: '0000000000421681' @ 1427197 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000421683' @ 225131 : 1 .. '0000000000446032' @ 973333 : 1]
+ num_segments: 1
+ files: [511]
+ guard_key: '0000000000446034' @ 66708 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000446034' @ 66707 : 1 .. '0000000000625217' @ 785289 : 1]
+ num_segments: 1
+ files: [516]
+ guard_key: '0000000000625218' @ 92576 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000625218' @ 92575 : 1 .. '0000000000716522' @ 946435 : 1]
+ num_segments: 1
+ files: [531]
+ guard_key: '0000000000716523' @ 286486 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000716523' @ 940937 : 1 .. '0000000000732421' @ 321003 : 1]
+ num_segments: 1
+ files: [532]
+ guard_key: '0000000000732422' @ 464460 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000732422' @ 464459 : 1 .. '0000000000756013' @ 982407 : 1]
+ num_segments: 1
+ files: [533]
+ guard_key: '0000000000756014' @ 1052998 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000756014' @ 1052997 : 1 .. '0000000000781436' @ 104395 : 1]
+ num_segments: 1
+ files: [534]
+ guard_key: '0000000000781439' @ 610112 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000781439' @ 1160783 : 1 .. '0000000000854147' @ 425405 : 1]
+ num_segments: 1
+ files: [535]
+ guard_key: '0000000000854148' @ 268544 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000854148' @ 1163339 : 1 .. '0000000000868868' @ 91809 : 1]
+ num_segments: 1
+ files: [538]
+ guard_key: '0000000000868870' @ 887368 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000868870' @ 887367 : 1 .. '0000000000871387' @ 163521 : 1]
+ num_segments: 1
+ files: [539]
+ guard_key: '0000000000871388' @ 1297350 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000871391' @ 614757 : 1 .. '0000000000909575' @ 484383 : 1]
+ num_segments: 1
+ files: [540]
+ guard_key: '0000000000909577' @ 699896 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000909577' @ 699895 : 1 .. '0000000000939962' @ 981249 : 1]
+ num_segments: 1
+ files: [541]
+ guard_key: '0000000000939966' @ 63832 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000939966' @ 844575 : 1 .. '0000000000946966' @ 272959 : 1]
+ num_segments: 1
+ files: [542]
+ guard_key: '0000000000946967' @ 1250994 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000946969' @ 516991 : 1 .. '0000000000953822' @ 732875 : 1]
+ num_segments: 1
+ files: [543]
+ guard_key: '0000000000953824' @ 1418886 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000953826' @ 166797 : 1 .. '0000000000991113' @ 809291 : 1]
+ num_segments: 1
+ files: [544]
+ guard_key: '0000000000991114' @ 106286 : 1
+ guard_compaction_score: 0.333333
+ guard_range: ['0000000000991114' @ 106285 : 1 .. '0000000000999999' @ 590375 : 1]
+ num_segments: 1
+ files: [545]
+ ------ Complete Guards ------
+ num_guards: 24
+ num_complete_guard_files_in_level: 0
+
+-------------------------- Timer information ----------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 0 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 1 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 2 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 3 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Cumulative static timer information --------------------
+
+-------------------------------------------------------------------
+	Command being timed: "./db_bench --benchmarks=stats,sstables --num=1000000 --reads=1000000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --bloom_bits=-1 --use_ribbon_filter=0 --use_xor_filter=0 --use_existing_db=1 --db=/home/maykoll_vanegas/Proyecto-SOA-local/Resultados/Experimento_C_Final/run_01/nofilter/database/db"
+	User time (seconds): 0.01
+	System time (seconds): 0.02
+	Percent of CPU this job got: 64%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.05
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6084
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 1
+	Minor (reclaiming a frame) page faults: 2309
+	Voluntary context switches: 46
+	Involuntary context switches: 3
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 32
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0

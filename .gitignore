@@ -70,3 +70,4 @@ __pycache__/
 .idea/
 .DS_Store
 Thumbs.db
+Resultados/Experimento_C_Final/**/database/

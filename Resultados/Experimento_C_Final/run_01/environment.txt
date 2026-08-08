@@ -1,0 +1,34 @@
+=== Experimento C - PebblesDB ===
+Fecha: 2026-08-07T20:06:48-05:00
+
+Commit:
+dacab17636f7dc10189b56ebfc02eac62ee3148e
+
+Estado Git:
+ M Makefile.am
+ M db/db_bench.cc
+?? "../../Resultados/Diagnostico PebblesDB/"
+?? "../../Resultados/Experimento C/"
+?? ../../Resultados/Experimento_C_Final/
+?? bloom_smoke.log
+?? results/
+?? ribbon_smoke.log
+?? util/ribbon_filter.cc
+?? util/ribbon_filter.h
+?? util/xor_filter.cc
+?? util/xor_filter.h
+?? xor_smoke.log
+
+Compilador:
+g++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0
+Copyright (C) 2021 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+
+Binario:
+2e609d44e954964f10fed3ffe012f1884a03767a775eaef8eb149147cf59952d  ./db_bench
+
+Fuentes de filtros:
+3763d502fd3abb05b3ed96ab4266dd94590b8f51c198b59de3ca8ab26f72a789  util/ribbon_filter.cc
+3453ed4b2303b7da2daa4f80e0adad60c181aa29edf4fcc437ae905d8c9184e9  util/xor_filter.cc
