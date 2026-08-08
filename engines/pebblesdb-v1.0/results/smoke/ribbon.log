@@ -1,0 +1,253 @@
+LevelDB:    version 1.17
+Date:       Wed Aug  5 23:54:01 2026
+CPU:        16 * 12th Gen Intel(R) Core(TM) i5-12600KF
+CPUCache:   20480 KB
+... finished 100 ops                              ... finished 200 ops                              ... finished 300 ops                              ... finished 400 ops                              ... finished 500 ops                              ... finished 600 ops                              ... finished 700 ops                              ... finished 800 ops                              ... finished 900 ops                              ... finished 1000 ops                              ... finished 1500 ops                              ... finished 2000 ops                              ... finished 2500 ops                              ... finished 3000 ops                              ... finished 3500 ops                              ... finished 4000 ops                              ... finished 4500 ops                              ... finished 5000 ops                              ... finished 6000 ops                              ... finished 7000 ops                              ... finished 8000 ops                              ... finished 9000 ops                              ... finished 10000 ops                              ... finished 15000 ops                              ... finished 20000 ops                              ... finished 25000 ops                              ... finished 30000 ops                              ... finished 35000 ops                              ... finished 40000 ops                              ... finished 45000 ops                              ... finished 50000 ops                              ... finished 60000 ops                              ... finished 70000 ops                              ... finished 80000 ops                              ... finished 90000 ops                              ... finished 100000 ops                              Keys:       16 bytes each
+Values:     1024 bytes each (1024 bytes after compression)
+Entries:    100000
+RawSize:    99.2 MB (estimated)
+FileSize:   99.2 MB (estimated)
+Filter:     proyecto-soa.RibbonFilter64Packed.v1
+FilterMode: Ribbon
+FilterBits: 10 Bloom-equivalent bits/key
+------------------------------------------------
+fillseq      :       3.921 micros/op;  253.0 MB/s
+Microseconds per op:
+Count: 100000  Average: 3.9220  StdDev: 132.70
+Min: 0.0000  Median: 1.9661  Max: 14453.0000
+------------------------------------------------------
+[       0,       1 )     469   0.469%   0.469% 
+[       1,       2 )   51270  51.270%  51.739% ##########
+[       2,       3 )   33796  33.796%  85.535% #######
+[       3,       4 )    9769   9.769%  95.304% ##
+[       4,       5 )    2226   2.226%  97.530% 
+[       5,       6 )     697   0.697%  98.227% 
+[       6,       7 )     362   0.362%  98.589% 
+[       7,       8 )     159   0.159%  98.748% 
+[       8,       9 )     137   0.137%  98.885% 
+[       9,      10 )      82   0.082%  98.967% 
+[      10,      12 )      69   0.069%  99.036% 
+[      12,      14 )      33   0.033%  99.069% 
+[      14,      16 )      43   0.043%  99.112% 
+[      16,      18 )      18   0.018%  99.130% 
+[      18,      20 )      85   0.085%  99.215% 
+[      20,      25 )     499   0.499%  99.714% 
+[      25,      30 )     199   0.199%  99.913% 
+[      30,      35 )      27   0.027%  99.940% 
+[      35,      40 )       8   0.008%  99.948% 
+[      40,      45 )       7   0.007%  99.955% 
+[      45,      50 )       3   0.003%  99.958% 
+[      50,      60 )       7   0.007%  99.965% 
+[      60,      70 )       1   0.001%  99.966% 
+[      80,      90 )       3   0.003%  99.969% 
+[      90,     100 )       3   0.003%  99.972% 
+[     140,     160 )       1   0.001%  99.973% 
+[     160,     180 )       1   0.001%  99.974% 
+[     180,     200 )       1   0.001%  99.975% 
+[    5000,    6000 )       1   0.001%  99.976% 
+[    6000,    7000 )       6   0.006%  99.982% 
+[    7000,    8000 )       8   0.008%  99.990% 
+[    8000,    9000 )       6   0.006%  99.996% 
+[   10000,   12000 )       3   0.003%  99.999% 
+[   14000,   16000 )       1   0.001% 100.000% 
+
+compact      :  326730.000 micros/op;
+Microseconds per op:
+Count: 0  Average: 0.0000  StdDev: 0.00
+Min: 0.0000  Median: -nan  Max: 0.0000
+------------------------------------------------------
+
+... finished 100 ops                              ... finished 200 ops                              ... finished 300 ops                              ... finished 400 ops                              ... finished 500 ops                              ... finished 600 ops                              ... finished 700 ops                              ... finished 800 ops                              ... finished 900 ops                              ... finished 1000 ops                              ... finished 1500 ops                              ... finished 2000 ops                              ... finished 2500 ops                              ... finished 3000 ops                              ... finished 3500 ops                              ... finished 4000 ops                              ... finished 4500 ops                              ... finished 5000 ops                              ... finished 6000 ops                              ... finished 7000 ops                              ... finished 8000 ops                              ... finished 9000 ops                              ... finished 10000 ops                              ... finished 15000 ops                              ... finished 20000 ops                              ... finished 25000 ops                              ... finished 30000 ops                              ... finished 35000 ops                              ... finished 40000 ops                              ... finished 45000 ops                              ... finished 50000 ops                              ... finished 60000 ops                              ... finished 70000 ops                              ... finished 80000 ops                              ... finished 90000 ops                              ... finished 100000 ops                              readrandom   :       2.035 micros/op; (100000 of 100000 found)
+Microseconds per op:
+Count: 100000  Average: 2.0369  StdDev: 1.27
+Min: 0.0000  Median: 2.4849  Max: 222.0000
+------------------------------------------------------
+[       0,       1 )      76   0.076%   0.076% 
+[       1,       2 )   23365  23.365%  23.441% #####
+[       2,       3 )   54773  54.773%  78.214% ###########
+[       3,       4 )   19634  19.634%  97.848% ####
+[       4,       5 )    1680   1.680%  99.528% 
+[       5,       6 )     157   0.157%  99.685% 
+[       6,       7 )      69   0.069%  99.754% 
+[       7,       8 )      20   0.020%  99.774% 
+[       8,       9 )      49   0.049%  99.823% 
+[       9,      10 )      56   0.056%  99.879% 
+[      10,      12 )      18   0.018%  99.897% 
+[      14,      16 )      14   0.014%  99.911% 
+[      16,      18 )       3   0.003%  99.914% 
+[      18,      20 )       1   0.001%  99.915% 
+[      25,      30 )      83   0.083%  99.998% 
+[      30,      35 )       1   0.001%  99.999% 
+[     200,     250 )       1   0.001% 100.000% 
+
+... finished 100 ops                              ... finished 200 ops                              ... finished 300 ops                              ... finished 400 ops                              ... finished 500 ops                              ... finished 600 ops                              ... finished 700 ops                              ... finished 800 ops                              ... finished 900 ops                              ... finished 1000 ops                              ... finished 1500 ops                              ... finished 2000 ops                              ... finished 2500 ops                              ... finished 3000 ops                              ... finished 3500 ops                              ... finished 4000 ops                              ... finished 4500 ops                              ... finished 5000 ops                              ... finished 6000 ops                              ... finished 7000 ops                              ... finished 8000 ops                              ... finished 9000 ops                              ... finished 10000 ops                              ... finished 15000 ops                              ... finished 20000 ops                              ... finished 25000 ops                              ... finished 30000 ops                              ... finished 35000 ops                              ... finished 40000 ops                              ... finished 45000 ops                              ... finished 50000 ops                              ... finished 60000 ops                              ... finished 70000 ops                              ... finished 80000 ops                              ... finished 90000 ops                              ... finished 100000 ops                              readmissing  :       0.373 micros/op;
+Microseconds per op:
+Count: 100000  Average: 0.3745  StdDev: 0.77
+Min: 0.0000  Median: 0.7891  Max: 142.0000
+------------------------------------------------------
+[       0,       1 )   63360  63.360%  63.360% #############
+[       1,       2 )   36220  36.220%  99.580% #######
+[       2,       3 )     322   0.322%  99.902% 
+[       3,       4 )      85   0.085%  99.987% 
+[       4,       5 )       5   0.005%  99.992% 
+[       5,       6 )       1   0.001%  99.993% 
+[       7,       8 )       2   0.002%  99.995% 
+[       8,       9 )       1   0.001%  99.996% 
+[      10,      12 )       1   0.001%  99.997% 
+[      14,      16 )       1   0.001%  99.998% 
+[     120,     140 )       1   0.001%  99.999% 
+[     140,     160 )       1   0.001% 100.000% 
+
+
+                               Compactions
+Level  Files Size(MB) Time(sec) Read(MB) Write(MB)
+--------------------------------------------------
+  0        0        0         0        0       101
+  1        0        0         0      128       128
+  2        2      101         0      163       163
+
+
+--------------------- level 0 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 0
+ num_complete_guard_files_in_level: 0
+--------------------- level 1 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 0
+ num_complete_guard_files_in_level: 0
+--------------------- level 2 ---------------------
+ compaction_score_of_level: 0.666667
+ sentinel_compaction_score_of_level: 0.666667
+ total file size in this level: 106033132
+ ------ Files ------
+ num_files: 2
+ 66:68158210['0000000000000000' @ 1 : 1 .. '0000000000064279' @ 128559 : 1]
+ 67:37874922['0000000000064280' @ 128561 : 1 .. '0000000000099999' @ 199999 : 1]
+ ------ Sentinel files ------
+ num_sentinel_files: 2
+ 66:68158210['0000000000000000' @ 1 : 1 .. '0000000000064279' @ 128559 : 1]
+ 67:37874922['0000000000064280' @ 128561 : 1 .. '0000000000099999' @ 199999 : 1]
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 0
+ num_complete_guard_files_in_level: 0
+--------------------- level 3 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 0
+ num_complete_guard_files_in_level: 0
+--------------------- level 4 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 0
+ num_complete_guard_files_in_level: 0
+--------------------- level 5 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 0
+ num_complete_guard_files_in_level: 0
+--------------------- level 6 ---------------------
+ compaction_score_of_level: 0.000000
+ sentinel_compaction_score_of_level: 0.000000
+ total file size in this level: 0
+ ------ Files ------
+ num_files: 0
+ ------ Sentinel files ------
+ num_sentinel_files: 0
+ ------ Guards ------
+ num_guards: 0
+ num_guard_files_in_level: 0
+ ------ Complete Guards ------
+ num_guards: 2
+ num_complete_guard_files_in_level: 0
+
+-------------------------- Timer information ----------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 0 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 1 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 2 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Individual static timer information 3 --------------------
+
+-------------------------------------------------------------------
+-------------------------- Cumulative static timer information --------------------
+
+-------------------------------------------------------------------
+	Command being timed: "./db_bench --benchmarks=fillseq,compact,readrandom,readmissing,stats,sstables --num=100000 --reads=100000 --value_size=1024 --threads=1 --write_threads=1 --read_threads=1 --compression_ratio=1.0 --write_buffer_size=4194304 --cache_size=33554432 --block_size=4096 --histogram=1 --bloom_bits=10 --use_ribbon_filter=1 --use_xor_filter=0 --db=/tmp/pebbles_ribbon_smoke"
+	User time (seconds): 0.65
+	System time (seconds): 0.53
+	Percent of CPU this job got: 116%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:01.02
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 49204
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 26008
+	Minor (reclaiming a frame) page faults: 41027
+	Voluntary context switches: 3383
+	Involuntary context switches: 59
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 1012928
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
