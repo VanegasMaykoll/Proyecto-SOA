@@ -1,86 +1,0 @@
-LevelDB:    version 1.23
-Date:       Thu Jul 30 08:59:59 2026
-CPU:        32 * 13th Gen Intel(R) Core(TM) i9-13980HX
-CPUCache:   36864 KB
-long op: 30951.0 micros                              long op: 47420.0 micros                              long op: 23295.0 micros                              long op: 22034.0 micros                              ... finished 100 ops                              ... finished 200 ops                              long op: 20401.0 micros                              long op: 27104.0 micros                              long op: 21671.0 micros                              long op: 22004.0 micros                              long op: 23059.0 micros                              ... finished 300 ops                              long op: 21438.0 micros                              ... finished 400 ops                              ... finished 500 ops                              long op: 23208.0 micros                              ... finished 600 ops                              ... finished 700 ops                              ... finished 800 ops                              ... finished 900 ops                              ... finished 1000 ops                              ... finished 1500 ops                              ... finished 2000 ops                              ... finished 2500 ops                              ... finished 3000 ops                              ... finished 3500 ops                              ... finished 4000 ops                              ... finished 4500 ops                              long op: 20300.0 micros                              ... finished 5000 ops                              ... finished 6000 ops                              long op: 24407.0 micros                              long op: 29480.0 micros                              long op: 20721.0 micros                              long op: 29534.0 micros                              long op: 27358.0 micros                              ... finished 7000 ops                              ... finished 8000 ops                              ... finished 9000 ops                              long op: 20582.0 micros                              ... finished 10000 ops                              long op: 25988.0 micros                              long op: 21909.0 micros                              ... finished 15000 ops                              long op: 20292.0 micros                              long op: 29520.0 micros                              long op: 23462.0 micros                              long op: 28668.0 micros                              long op: 22935.0 micros                              long op: 25206.0 micros                              long op: 23747.0 micros                              long op: 37278.0 micros                              long op: 28415.0 micros                              ... finished 20000 ops                              long op: 26801.0 micros                              long op: 31421.0 micros                              long op: 28189.0 micros                              ... finished 25000 ops                              ... finished 30000 ops                              long op: 22477.0 micros                              ... finished 35000 ops                              long op: 24221.0 micros                              long op: 44328.0 micros                              long op: 31554.0 micros                              ... finished 40000 ops                              long op: 20604.0 micros                              ... finished 45000 ops                              long op: 20408.0 micros                              ... finished 50000 ops                              ... finished 60000 ops                              ... finished 70000 ops                              long op: 2912420.0 micros                              ... finished 80000 ops                              ... finished 90000 ops                              ... finished 100000 ops                              ... finished 150000 ops                              ... finished 200000 ops                              ... finished 250000 ops                              ... finished 300000 ops                              ... finished 350000 ops                              ... finished 400000 ops                              ... finished 450000 ops                              ... finished 500000 ops                              ... finished 600000 ops                              ... finished 700000 ops                              ... finished 800000 ops                              ... finished 900000 ops                              ... finished 1000000 ops                              Keys:       16 bytes each
-Values:     1024 bytes each (1024 bytes after compression)
-Entries:    1000000
-RawSize:    991.8 MB (estimated)
-FileSize:   991.8 MB (estimated)
-------------------------------------------------
-readrandom   :      32.219 micros/op; (1000000 of 1000000 found)
-Microseconds per op:
-Count: 1000000  Average: 32.2191  StdDev: 2938.29
-Min: 0.0000  Median: 1.5849  Max: 2912420.0000
-------------------------------------------------------
-[       0,       1 )   40759   4.076%   4.076% #
-[       1,       2 )  785132  78.513%  82.589% ################
-[       2,       3 )  109303  10.930%  93.519% ##
-[       3,       4 )    8451   0.845%  94.365% 
-[       4,       5 )    7655   0.766%  95.130% 
-[       5,       6 )    5443   0.544%  95.674% 
-[       6,       7 )    3358   0.336%  96.010% 
-[       7,       8 )    2889   0.289%  96.299% 
-[       8,       9 )    3002   0.300%  96.599% 
-[       9,      10 )    3594   0.359%  96.959% 
-[      10,      12 )    5313   0.531%  97.490% 
-[      12,      14 )    2446   0.245%  97.735% 
-[      14,      16 )    1004   0.100%  97.835% 
-[      16,      18 )     591   0.059%  97.894% 
-[      18,      20 )     525   0.053%  97.947% 
-[      20,      25 )    1168   0.117%  98.063% 
-[      25,      30 )     996   0.100%  98.163% 
-[      30,      35 )    1599   0.160%  98.323% 
-[      35,      40 )     430   0.043%  98.366% 
-[      40,      45 )     227   0.023%  98.389% 
-[      45,      50 )     138   0.014%  98.402% 
-[      50,      60 )     126   0.013%  98.415% 
-[      60,      70 )     139   0.014%  98.429% 
-[      70,      80 )      96   0.010%  98.438% 
-[      80,      90 )     127   0.013%  98.451% 
-[      90,     100 )     147   0.015%  98.466% 
-[     100,     120 )     324   0.032%  98.498% 
-[     120,     140 )     329   0.033%  98.531% 
-[     140,     160 )     378   0.038%  98.569% 
-[     160,     180 )     342   0.034%  98.603% 
-[     180,     200 )     286   0.029%  98.632% 
-[     200,     250 )     581   0.058%  98.690% 
-[     250,     300 )     575   0.058%  98.747% 
-[     300,     350 )     554   0.055%  98.803% 
-[     350,     400 )     491   0.049%  98.852% 
-[     400,     450 )     391   0.039%  98.891% 
-[     450,     500 )     376   0.038%  98.928% 
-[     500,     600 )     755   0.075%  99.004% 
-[     600,     700 )     748   0.075%  99.079% 
-[     700,     800 )     691   0.069%  99.148% 
-[     800,     900 )     593   0.059%  99.207% 
-[     900,    1000 )     456   0.046%  99.253% 
-[    1000,    1200 )     762   0.076%  99.329% 
-[    1200,    1400 )     551   0.055%  99.384% 
-[    1400,    1600 )     508   0.051%  99.435% 
-[    1600,    1800 )     501   0.050%  99.485% 
-[    1800,    2000 )     543   0.054%  99.539% 
-[    2000,    2500 )    1201   0.120%  99.659% 
-[    2500,    3000 )     880   0.088%  99.747% 
-[    3000,    3500 )     613   0.061%  99.809% 
-[    3500,    4000 )     431   0.043%  99.852% 
-[    4000,    4500 )     283   0.028%  99.880% 
-[    4500,    5000 )     214   0.021%  99.901% 
-[    5000,    6000 )     279   0.028%  99.929% 
-[    6000,    7000 )     151   0.015%  99.945% 
-[    7000,    8000 )     114   0.011%  99.956% 
-[    8000,    9000 )      81   0.008%  99.964% 
-[    9000,   10000 )      62   0.006%  99.970% 
-[   10000,   12000 )      74   0.007%  99.978% 
-[   12000,   14000 )      93   0.009%  99.987% 
-[   14000,   16000 )      54   0.005%  99.992% 
-[   16000,   18000 )      22   0.002%  99.995% 
-[   18000,   20000 )      16   0.002%  99.996% 
-[   20000,   25000 )      21   0.002%  99.998% 
-[   25000,   30000 )      11   0.001%  99.999% 
-[   30000,   35000 )       3   0.000% 100.000% 
-[   35000,   40000 )       1   0.000% 100.000% 
-[   40000,   45000 )       1   0.000% 100.000% 
-[   45000,   50000 )       1   0.000% 100.000% 
-[ 2500000, 3000000 )       1   0.000% 100.000% 
-
