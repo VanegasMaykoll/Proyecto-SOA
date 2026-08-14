@@ -943,6 +943,7 @@ DEFINE_double(bloom_bits, -1,
               "Zero disables.");
 
 DEFINE_bool(use_ribbon_filter, false, "Use Ribbon instead of Bloom filter");
+DEFINE_bool(use_xor_filter, false, "Use Xor instead of Bloom filter");
 
 DEFINE_double(memtable_bloom_size_ratio,
               ROCKSDB_NAMESPACE::Options().memtable_prefix_bloom_size_ratio,
@@ -5166,9 +5167,13 @@ class Benchmark {
         } else if (FLAGS_bloom_bits == 0) {
           table_options->filter_policy.reset();
         } else {
-          table_options->filter_policy.reset(
-              FLAGS_use_ribbon_filter ? NewRibbonFilterPolicy(FLAGS_bloom_bits)
-                                      : NewBloomFilterPolicy(FLAGS_bloom_bits));
+          if (FLAGS_use_xor_filter) {
+            table_options->filter_policy.reset(NewXorFilterPolicy(FLAGS_bloom_bits));
+          } else {
+            table_options->filter_policy.reset(
+                FLAGS_use_ribbon_filter ? NewRibbonFilterPolicy(FLAGS_bloom_bits)
+                                        : NewBloomFilterPolicy(FLAGS_bloom_bits));
+          }
         }
       }
     }
@@ -9622,8 +9627,8 @@ void ValidateEnableSpeedbFlags() {
       "max_background_compactions", "max_background_flushes", "cache_size",
       "cache_type",
       // Assume simcache_size default is disabled simcache
-      "simcache_size", "memtablerep", "pinning_policy",
-      "scoped_pinning_capacity", "use_ribbon_filter", "bloom_bits",
+      "simcache_size", "memtablerep", "pinning_policy", "cache_index_and_filter_blocks", "cache_index_and_filter_blocks_with_high_priority", "pin_l0_filter_and_index_blocks_in_cache", "pin_top_level_index_and_filter",
+      "scoped_pinning_capacity", "use_ribbon_filter", "use_xor_filter", "bloom_bits",
       "allow_wbm_stalls", "db_write_buffer_size", "initiate_wbm_flushes",
       "bytes_per_sync", "use_dynamic_delay", "memtable_bloom_size_ratio",
       "whole_key_filtering", "optimize_filters_for_hits",

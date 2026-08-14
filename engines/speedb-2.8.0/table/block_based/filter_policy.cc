@@ -47,6 +47,7 @@
 #include "util/ribbon_config.h"
 #include "util/ribbon_impl.h"
 #include "util/string_util.h"
+#include "util/xor_filter.h"
 
 namespace ROCKSDB_NAMESPACE {
 
@@ -1525,6 +1526,9 @@ BuiltinFilterBitsReader* BuiltinFilterPolicy::GetBuiltinFilterBitsReader(
       case -2:
         // Marker for Ribbon implementations
         return GetRibbonBitsReader(contents);
+      case -3:
+        // Marker for Xor implementations
+        return GetXorFilterBitsReader(contents);
       default:
         // Reserved (treat as zero probes, always FP, for now)
         return new AlwaysTrueFilter();
@@ -1733,6 +1737,8 @@ std::shared_ptr<const FilterPolicy> BloomLikeFilterPolicy::Create(
     return std::make_shared<test::FastLocalBloomFilterPolicy>(bits_per_key);
   } else if (name == test::Standard128RibbonFilterPolicy::kClassName()) {
     return std::make_shared<test::Standard128RibbonFilterPolicy>(bits_per_key);
+  } else if (name == XorFilterPolicy::kClassName()) {
+    return std::make_shared<XorFilterPolicy>(bits_per_key, 0);
   } else if (name == BloomFilterPolicy::kClassName()) {
     // For testing
     return std::make_shared<BloomFilterPolicy>(bits_per_key);
@@ -1820,6 +1826,28 @@ static int RegisterBuiltinFilterPolicies(ObjectLibrary& library,
         return guard->get();
       });
   library.AddFactory<const FilterPolicy>(
+      FilterPatternEntryWithBits(XorFilterPolicy::kClassName())
+          .AnotherName(XorFilterPolicy::kNickName()),
+      [](const std::string& uri, std::unique_ptr<const FilterPolicy>* guard,
+         std::string* /* errmsg */) {
+        const std::vector<std::string> vals = StringSplit(uri, ':');
+        double bits_per_key = ParseDouble(vals[1]);
+        guard->reset(NewXorFilterPolicy(bits_per_key));
+        return guard->get();
+      });
+  library.AddFactory<const FilterPolicy>(
+      FilterPatternEntryWithBits(XorFilterPolicy::kClassName())
+          .AnotherName(XorFilterPolicy::kNickName())
+          .AddNumber(":", true),
+      [](const std::string& uri, std::unique_ptr<const FilterPolicy>* guard,
+         std::string* /* errmsg */) {
+        const std::vector<std::string> vals = StringSplit(uri, ':');
+        double bits_per_key = ParseDouble(vals[1]);
+        int bloom_before_level = ParseInt(vals[2]);
+        guard->reset(NewXorFilterPolicy(bits_per_key, bloom_before_level));
+        return guard->get();
+      });
+  library.AddFactory<const FilterPolicy>(
       FilterPatternEntryWithBits(test::LegacyBloomFilterPolicy::kClassName()),
       [](const std::string& uri, std::unique_ptr<const FilterPolicy>* guard,
          std::string* /* errmsg */) {
@@ -1898,6 +1926,7 @@ const std::vector<std::string>& BloomLikeFilterPolicy::GetAllFixedImpls() {
       test::LegacyBloomFilterPolicy::kClassName(),
       test::FastLocalBloomFilterPolicy::kClassName(),
       test::Standard128RibbonFilterPolicy::kClassName(),
+      XorFilterPolicy::kClassName(),
   };
   return impls;
 }

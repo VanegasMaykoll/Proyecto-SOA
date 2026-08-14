@@ -222,4 +222,7 @@ extern const FilterPolicy* NewBloomFilterPolicy(
 extern const FilterPolicy* NewRibbonFilterPolicy(
     double bloom_equivalent_bits_per_key, int bloom_before_level = 0);
 
+extern const FilterPolicy* NewXorFilterPolicy(
+    double bloom_equivalent_bits_per_key, int bloom_before_level = 0);
+
 }  // namespace ROCKSDB_NAMESPACE

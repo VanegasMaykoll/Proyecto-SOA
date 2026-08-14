@@ -407,6 +407,26 @@ class RibbonFilterPolicy : public BloomLikeFilterPolicy {
   const int bloom_before_level_;
 };
 
+class XorFilterPolicy : public BloomLikeFilterPolicy {
+ public:
+  explicit XorFilterPolicy(double bloom_equivalent_bits_per_key,
+                           int bloom_before_level = 0);
+
+  FilterBitsBuilder* GetBuilderWithContext(
+      const FilterBuildingContext&) const override;
+
+  int GetBloomBeforeLevel() const { return bloom_before_level_; }
+
+  static const char* kClassName();
+  const char* Name() const override { return kClassName(); }
+  static const char* kNickName();
+  const char* NickName() const override { return kNickName(); }
+  std::string GetId() const override;
+
+ private:
+  const int bloom_before_level_;
+};
+
 class AlwaysTrueFilter : public BuiltinFilterBitsReader {
  public:
   bool MayMatch(const Slice&) override { return true; }
