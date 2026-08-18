@@ -913,6 +913,7 @@ set(SOURCES
         util/crc32c.cc
         util/data_structure.cc
         util/dynamic_bloom.cc
+        util/xor_filter.cc
         util/hash.cc
         util/murmurhash.cc
         util/random.cc

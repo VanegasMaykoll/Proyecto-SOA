@@ -858,6 +858,7 @@ set(SOURCES
         util/random.cc
         util/rate_limiter.cc
         util/ribbon_config.cc
+        util/xor_filter.cc
         util/slice.cc
         util/file_checksum_helper.cc
         util/status.cc

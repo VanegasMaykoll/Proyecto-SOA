@@ -244,6 +244,7 @@ LIB_SOURCES =                                                   \
   util/crc32c_arm64.cc                                          \
   util/data_structure.cc                                        \
   util/dynamic_bloom.cc                                         \
+  util/xor_filter.cc                                            \
   util/hash.cc                                                  \
   util/murmurhash.cc                                            \
   util/random.cc                                                \

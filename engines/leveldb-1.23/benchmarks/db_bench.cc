@@ -20,6 +20,7 @@
 #include "util/mutexlock.h"
 #include "util/random.h"
 #include "util/ribbon_filter.h"
+#include "util/xor_filter.h"
 #include "util/testutil.h"
 
 // Comma-separated list of operations to run in the specified order
@@ -110,6 +111,7 @@ static int FLAGS_bloom_bits = -1;
 
 // If true, use Ribbon filter instead of Bloom filter.
 static bool FLAGS_use_ribbon_filter = false;
+static bool FLAGS_use_xor_filter = false;
 
 // Common key prefix length.
 static int FLAGS_key_prefix = 0;
@@ -466,7 +468,8 @@ class Benchmark {
   Benchmark()
       : cache_(FLAGS_cache_size >= 0 ? NewLRUCache(FLAGS_cache_size) : nullptr),
         filter_policy_(FLAGS_bloom_bits >= 0
-                           ? (FLAGS_use_ribbon_filter ? NewRibbonFilterPolicy(FLAGS_bloom_bits) : NewBloomFilterPolicy(FLAGS_bloom_bits))
+                           ? (FLAGS_use_ribbon_filter ? NewRibbonFilterPolicy(FLAGS_bloom_bits) : 
+                             (FLAGS_use_xor_filter ? NewXorFilterPolicy(FLAGS_bloom_bits) : NewBloomFilterPolicy(FLAGS_bloom_bits)))
                            : nullptr),
         db_(nullptr),
         num_(FLAGS_num),
@@ -1072,6 +1075,9 @@ int main(int argc, char** argv) {
     } else if (sscanf(argv[i], "--use_ribbon_filter=%d%c", &n, &junk) == 1 &&
                (n == 0 || n == 1)) {
       FLAGS_use_ribbon_filter = n;
+    } else if (sscanf(argv[i], "--use_xor_filter=%d%c", &n, &junk) == 1 &&
+               (n == 0 || n == 1)) {
+      FLAGS_use_xor_filter = n;
     } else if (sscanf(argv[i], "--open_files=%d%c", &n, &junk) == 1) {
       FLAGS_open_files = n;
     } else if (strncmp(argv[i], "--db=", 5) == 0) {

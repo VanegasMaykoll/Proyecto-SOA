@@ -33,6 +33,7 @@
 #include "util/math.h"
 #include "util/ribbon_config.h"
 #include "util/ribbon_impl.h"
+#include "util/xor_filter.h"
 #include "util/string_util.h"
 
 namespace ROCKSDB_NAMESPACE {
@@ -1589,6 +1590,9 @@ BuiltinFilterBitsReader* BuiltinFilterPolicy::GetBuiltinFilterBitsReader(
       case -2:
         // Marker for Ribbon implementations
         return GetRibbonBitsReader(contents);
+      case -3:
+        // Marker for Xor implementations
+        return GetXorFilterBitsReader(contents);
       default:
         // Reserved (treat as zero probes, always FP, for now)
         return new AlwaysTrueFilter();
@@ -1804,6 +1808,8 @@ std::shared_ptr<const FilterPolicy> BloomLikeFilterPolicy::Create(
     // For testing
     return std::make_shared<RibbonFilterPolicy>(bits_per_key,
                                                 /*bloom_before_level*/ 0);
+  } else if (name == "xorfilter") {
+    return std::shared_ptr<const FilterPolicy>(NewXorFilterPolicy(bits_per_key));
   } else {
     return nullptr;
   }
