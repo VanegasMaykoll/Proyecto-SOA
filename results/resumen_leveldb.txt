@@ -58,8 +58,8 @@ Descripción: Posicionamiento de iteradores y cursores Seek sobre bloques de dat
 ----------------------------------------------------------------------------------------------------
 Variante     Filtro                  Ops/sec       Latencia   Throughput     Aciertos/Total    Tamaño DB
 ----------------------------------------------------------------------------------------------------
-nofilter     Sin Filtro              249,066    4.015 µs/op            -   126482 / 1000000     52.17 MB
-bloom        Bloom (10 bpk)          180,440    5.542 µs/op            -   126482 / 1000000     56.22 MB
-ribbon       Ribbon (10 bpk)         268,601    3.723 µs/op            -   126482 / 1000000     52.98 MB
-xor          Xor (10 bpk)            211,954    4.718 µs/op            -   126482 / 1000000     56.25 MB
+nofilter     Sin Filtro              249,066    4.015 µs/op            -    126482 / 200000     52.17 MB
+bloom        Bloom (10 bpk)          180,440    5.542 µs/op            -    126482 / 200000     56.22 MB
+ribbon       Ribbon (10 bpk)         268,601    3.723 µs/op            -    126482 / 200000     52.98 MB
+xor          Xor (10 bpk)            211,954    4.718 µs/op            -    126482 / 200000     56.25 MB
 ----------------------------------------------------------------------------------------------------

@@ -885,7 +885,7 @@ class Benchmark {
       thread->stats.FinishedSingleOp();
     }
     char msg[100];
-    std::snprintf(msg, sizeof(msg), "(%d of %d found)", found, num_);
+    std::snprintf(msg, sizeof(msg), "(%d of %d found)", found, reads_);
     thread->stats.AddMessage(msg);
   }
 
@@ -929,7 +929,7 @@ class Benchmark {
       thread->stats.FinishedSingleOp();
     }
     char msg[100];
-    snprintf(msg, sizeof(msg), "(%d of %d found)", found, num_);
+    snprintf(msg, sizeof(msg), "(%d of %d found)", found, reads_);
     thread->stats.AddMessage(msg);
   }
 
@@ -948,7 +948,7 @@ class Benchmark {
     }
     delete iter;
     char msg[100];
-    std::snprintf(msg, sizeof(msg), "(%d of %d found)", found, num_);
+    std::snprintf(msg, sizeof(msg), "(%d of %d found)", found, reads_);
     thread->stats.AddMessage(msg);
   }
 
