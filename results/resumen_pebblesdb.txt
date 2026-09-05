@@ -1,0 +1,65 @@
+====================================================================================================
+ REPORTE CONSOLIDADO DE RENDIMIENTO DE FILTROS PROBABILÍSTICOS: PEBBLESDB v1.0
+ Fecha: 2026-09-04 22:36:34 | CPU: 12th Gen Intel(R) Core(TM) i5-12600KF
+ Parámetros Base: N=1000000, Reads=1000000, ValueSize=100B, WriteBuffer=4MB, Cache=32MB
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+[PRUEBA 01: NEGATIVE LOOKUPS (READMISSING)]
+Descripción: Lectura de claves inexistentes (100% misses). Evalúa el ahorro de I/O a disco.
+----------------------------------------------------------------------------------------------------
+Variante     Filtro                  Ops/sec       Latencia   Throughput     Aciertos/Total    Tamaño DB
+----------------------------------------------------------------------------------------------------
+nofilter     Sin Filtro              163,988    6.098 µs/op            -                  -     98.44 MB
+bloom        Bloom (10 bpk)        1,233,046    0.811 µs/op            -                  -    103.92 MB
+ribbon       Ribbon (10 bpk)         861,326    1.161 µs/op            -                  -    160.89 MB
+xor          Xor (10 bpk)          1,191,895    0.839 µs/op            -                  -    119.38 MB
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+[PRUEBA 02: POSITIVE POINT READS (READRANDOM)]
+Descripción: Lectura aleatoria de claves existentes (100% hits). Evalúa el overhead de hashing.
+----------------------------------------------------------------------------------------------------
+Variante     Filtro                  Ops/sec       Latencia   Throughput     Aciertos/Total    Tamaño DB
+----------------------------------------------------------------------------------------------------
+nofilter     Sin Filtro              269,906    3.705 µs/op            -  1000000 / 1000000    106.77 MB
+bloom        Bloom (10 bpk)          485,909    2.058 µs/op            -  1000000 / 1000000    100.40 MB
+ribbon       Ribbon (10 bpk)         434,972    2.299 µs/op            -  1000000 / 1000000    158.89 MB
+xor          Xor (10 bpk)            486,618    2.055 µs/op            -  1000000 / 1000000    119.38 MB
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+[PRUEBA 03: INGESTA MASIVA Y HUELLA EN DISCO (FILLRANDOM)]
+Descripción: Escritura masiva de 1KB forzando compactaciones y evaluando tamaño en disco.
+----------------------------------------------------------------------------------------------------
+Variante     Filtro                  Ops/sec       Latencia   Throughput     Aciertos/Total    Tamaño DB
+----------------------------------------------------------------------------------------------------
+nofilter     Sin Filtro              120,279    8.314 µs/op   119.3 MB/s                  -    891.62 MB
+bloom        Bloom (10 bpk)          115,300    8.673 µs/op   114.4 MB/s                  -    844.42 MB
+ribbon       Ribbon (10 bpk)          93,058   10.746 µs/op    92.3 MB/s                  -    880.38 MB
+xor          Xor (10 bpk)             81,380   12.288 µs/op    80.7 MB/s                  -    874.60 MB
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+[PRUEBA 04: LECTURA CONCURRENTE CON ESCRITURA (READWHILEWRITING)]
+Descripción: Lectura concurrente con múltiples hilos mientras se construyen filtros y compactan datos.
+----------------------------------------------------------------------------------------------------
+Variante     Filtro                  Ops/sec       Latencia   Throughput     Aciertos/Total    Tamaño DB
+----------------------------------------------------------------------------------------------------
+nofilter     Sin Filtro          ERROR / N/A              -            -                  -    257.58 MB
+bloom        Bloom (10 bpk)          139,606    7.163 µs/op            -   666229 / 1000000    279.24 MB
+ribbon       Ribbon (10 bpk)         137,476    7.274 µs/op            -   685189 / 1000000    196.20 MB
+xor          Xor (10 bpk)            145,539    6.871 µs/op            -   671930 / 1000000    214.90 MB
+----------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------
+[PRUEBA 05: BÚSQUEDAS DE RANGO / ITERADORES (SEEKRANDOM)]
+Descripción: Posicionamiento de iteradores y cursores Seek sobre bloques de datos.
+----------------------------------------------------------------------------------------------------
+Variante     Filtro                  Ops/sec       Latencia   Throughput     Aciertos/Total    Tamaño DB
+----------------------------------------------------------------------------------------------------
+nofilter     Sin Filtro              138,160    7.238 µs/op            -    200000 / 200000    109.02 MB
+bloom        Bloom (10 bpk)          171,233    5.840 µs/op            -    200000 / 200000     84.61 MB
+ribbon       Ribbon (10 bpk)         174,277    5.738 µs/op            -    200000 / 200000    202.34 MB
+xor          Xor (10 bpk)            145,921    6.853 µs/op            -    200000 / 200000    195.02 MB
+----------------------------------------------------------------------------------------------------

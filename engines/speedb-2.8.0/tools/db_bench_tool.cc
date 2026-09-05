@@ -5167,6 +5167,10 @@ class Benchmark {
         } else if (FLAGS_bloom_bits == 0) {
           table_options->filter_policy.reset();
         } else {
+          if (FLAGS_use_xor_filter && FLAGS_use_ribbon_filter) {
+            fprintf(stderr, "Cannot specify both --use_xor_filter and --use_ribbon_filter\n");
+            exit(1);
+          }
           if (FLAGS_use_xor_filter) {
             table_options->filter_policy.reset(NewXorFilterPolicy(FLAGS_bloom_bits));
           } else {

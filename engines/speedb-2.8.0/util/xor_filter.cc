@@ -95,7 +95,7 @@ static bool ReadPackedValue(const char* payload, size_t payload_size, uint32_t i
 // -----------------------------------------------------------------------------
 
 static uint64_t MixHash(uint64_t hash, uint32_t seed) {
-  uint64_t mixed = hash ^ seed;
+  uint64_t mixed = hash ^ (static_cast<uint64_t>(seed) * 0x9e3779b97f4a7c15ULL);
   mixed *= 0xff51afd7ed558ccdULL;
   mixed ^= mixed >> 33;
   mixed *= 0xc4ceb9fe1a85ec53ULL;
@@ -147,6 +147,13 @@ static uint32_t BloomBitCount(size_t key_count, int bits_per_key) {
   return static_cast<uint32_t>(bits);
 }
 
+static int ComputeFingerprintBits(int bits_per_key) {
+  int bits = static_cast<int>(std::ceil(bits_per_key * 0.6931471805599453));
+  if (bits < 1) bits = 1;
+  if (bits > 16) bits = 16;
+  return bits;
+}
+
 static void BuildBloomFallback(const std::vector<uint64_t>& hashes, int bits_per_key, std::string* dst) {
   const uint32_t bit_count = BloomBitCount(hashes.size(), bits_per_key);
   const uint32_t byte_count = bit_count / 8;
@@ -165,10 +172,14 @@ static void BuildBloomFallback(const std::vector<uint64_t>& hashes, int bits_per
     }
   }
 
-  // We don't implement a Bloom fallback here that uses the Xor marker.
-  // If it falls back, we just use a 5-byte trailer with -1 (Bloom marker)
-  dst->push_back(static_cast<char>(-1));
+  // Use kRocksDbMarkerXor (-3) so RocksDB routes to XorFilterBitsReader.
+  // We signal Bloom fallback by setting block_length = 0,
+  // storing bit_count in seed, and probes in fingerprint_bits.
+  PutFixed32(dst, bit_count);
+  PutFixed32(dst, 0);
   dst->push_back(static_cast<char>(probes));
+  dst->push_back(static_cast<char>(kRocksDbMarkerXor));
+  dst->push_back(static_cast<char>(0));
   dst->push_back(static_cast<char>(0));
   dst->push_back(static_cast<char>(0));
   dst->push_back(static_cast<char>(0));
@@ -199,16 +210,23 @@ class XorFilterBitsBuilder : public BuiltinFilterBitsBuilder {
   }
 
   size_t CalculateSpace(size_t num_entries) override {
-    return static_cast<size_t>(num_entries) * bits_per_key_ / 8 + kTrailerSize;
+    const int fp_bits = ComputeFingerprintBits(bits_per_key_);
+    const uint64_t capacity = (static_cast<uint64_t>(num_entries) * kCapacityNumerator / kCapacityDenominator) + kCapacitySlack;
+    const uint32_t block_length = static_cast<uint32_t>(capacity / 3);
+    const uint32_t table_size = 3 * block_length;
+    return (static_cast<size_t>(table_size) * fp_bits + 7) / 8 + kTrailerSize;
   }
 
   double EstimatedFpRate(size_t /*num_entries*/, size_t /*bytes*/) override {
-    return 1.0 / std::pow(2.0, bits_per_key_);
+    const int fp_bits = ComputeFingerprintBits(bits_per_key_);
+    return 1.0 / (1ULL << fp_bits);
   }
 
   size_t ApproximateNumEntries(size_t bytes) override {
     if (bytes < kTrailerSize) return 0;
-    return (bytes - kTrailerSize) * 8 / bits_per_key_;
+    const int fp_bits = ComputeFingerprintBits(bits_per_key_);
+    const double bytes_for_table = static_cast<double>(bytes - kTrailerSize);
+    return static_cast<size_t>((bytes_for_table * 8.0) / (1.23 * fp_bits));
   }
 
   using FilterBitsBuilder::Finish;
@@ -222,8 +240,11 @@ class XorFilterBitsBuilder : public BuiltinFilterBitsBuilder {
     std::string filter_data;
 
     if (key_count == 0) {
-      // Always false filter
+      // Empty filter
+      PutFixed32(&filter_data, 0);
+      PutFixed32(&filter_data, 0);
       filter_data.push_back(static_cast<char>(0));
+      filter_data.push_back(static_cast<char>(kRocksDbMarkerXor));
       filter_data.push_back(static_cast<char>(0));
       filter_data.push_back(static_cast<char>(0));
       filter_data.push_back(static_cast<char>(0));
@@ -237,8 +258,7 @@ class XorFilterBitsBuilder : public BuiltinFilterBitsBuilder {
     }
 
     {
-      int fingerprint_bits = bits_per_key_ - 2;
-      if (fingerprint_bits < 1) fingerprint_bits = 1;
+      int fingerprint_bits = ComputeFingerprintBits(bits_per_key_);
 
       const uint64_t capacity = (static_cast<uint64_t>(key_count) * kCapacityNumerator / kCapacityDenominator) + kCapacitySlack;
       const uint32_t block_length = static_cast<uint32_t>(capacity / 3);
@@ -249,73 +269,68 @@ class XorFilterBitsBuilder : public BuiltinFilterBitsBuilder {
         goto done;
       }
 
-      struct SetEntry {
+      struct PeelEntry {
         uint64_t hash;
-        uint32_t index;
+        uint32_t selected_position;
       };
 
-      std::vector<uint32_t> degree(table_size, 0);
-      std::vector<uint64_t> t2hash(table_size, 0);
-      std::vector<uint32_t> t2index(table_size, 0);
-      std::vector<SetEntry> queue(table_size);
-      std::vector<SetEntry> stack(key_count);
+      std::vector<uint32_t> counts(table_size, 0);
+      std::vector<uint64_t> hash_xors(table_size, 0);
+      std::vector<uint32_t> queue;
+      queue.reserve(table_size);
+      std::vector<PeelEntry> peel_order;
+      peel_order.reserve(key_count);
 
       uint32_t best_seed = 0;
       bool success = false;
 
       for (uint32_t seed = 0; seed < kMaxSeedTries; ++seed) {
-        std::fill(degree.begin(), degree.end(), 0);
-        std::fill(t2hash.begin(), t2hash.end(), 0);
+        std::fill(counts.begin(), counts.end(), 0);
+        std::fill(hash_xors.begin(), hash_xors.end(), 0);
+        queue.clear();
+        peel_order.clear();
 
         for (size_t i = 0; i < key_count; ++i) {
           uint64_t mixed = MixHash(hashes[i], seed);
           uint32_t pos[3];
           GetPositions(mixed, block_length, pos);
           for (int j = 0; j < 3; ++j) {
-            degree[pos[j]]++;
-            t2hash[pos[j]] ^= mixed;
-            t2index[pos[j]] ^= static_cast<uint32_t>(i);
+            ++counts[pos[j]];
+            hash_xors[pos[j]] ^= mixed;
           }
         }
 
-        uint32_t q_size = 0;
         for (uint32_t i = 0; i < table_size; ++i) {
-          if (degree[i] == 1) {
-            queue[q_size].index = i;
-            queue[q_size].hash = t2hash[i];
-            q_size++;
+          if (counts[i] == 1) {
+            queue.push_back(i);
           }
         }
 
-        uint32_t stack_size = 0;
-        while (q_size > 0) {
-          q_size--;
-          uint32_t i = queue[q_size].index;
-          if (degree[i] == 1) {
-            uint64_t mixed = queue[q_size].hash;
-            uint32_t pos[3];
-            GetPositions(mixed, block_length, pos);
+        size_t queue_index = 0;
+        while (queue_index < queue.size()) {
+          const uint32_t selected_position = queue[queue_index++];
+          if (counts[selected_position] != 1) {
+            continue;
+          }
 
-            uint32_t key_index = t2index[i];
-            stack[stack_size].index = i;
-            stack[stack_size].hash = mixed;
-            stack_size++;
+          const uint64_t mixed = hash_xors[selected_position];
+          peel_order.push_back({mixed, selected_position});
 
-            for (int j = 0; j < 3; ++j) {
-              uint32_t p = pos[j];
-              degree[p]--;
-              if (degree[p] == 1) {
-                t2hash[p] ^= mixed;
-                t2index[p] ^= key_index;
-                queue[q_size].index = p;
-                queue[q_size].hash = t2hash[p];
-                q_size++;
-              }
+          uint32_t pos[3];
+          GetPositions(mixed, block_length, pos);
+
+          for (int j = 0; j < 3; ++j) {
+            const uint32_t p = pos[j];
+            if (counts[p] == 0) continue;
+            --counts[p];
+            hash_xors[p] ^= mixed;
+            if (counts[p] == 1) {
+              queue.push_back(p);
             }
           }
         }
 
-        if (stack_size == key_count) {
+        if (peel_order.size() == key_count) {
           best_seed = seed;
           success = true;
           break;
@@ -328,15 +343,15 @@ class XorFilterBitsBuilder : public BuiltinFilterBitsBuilder {
       }
 
       std::vector<uint32_t> B(table_size, 0);
-      while (stack.size() > 0 && stack.back().hash == 0 && stack.back().index == 0 && stack.size() > key_count) {
-         stack.pop_back(); // Remove extra zeroed elements if any.
-      }
-      for (size_t i = key_count; i > 0; --i) {
-        uint32_t index = stack[i - 1].index;
-        uint64_t mixed = stack[i - 1].hash;
+      for (size_t reverse = peel_order.size(); reverse > 0; --reverse) {
+        const PeelEntry& entry = peel_order[reverse - 1];
         uint32_t pos[3];
-        GetPositions(mixed, block_length, pos);
-        B[index] = Fingerprint(mixed, fingerprint_bits) ^ B[pos[0]] ^ B[pos[1]] ^ B[pos[2]];
+        GetPositions(entry.hash, block_length, pos);
+        uint32_t val = Fingerprint(entry.hash, fingerprint_bits);
+        val ^= B[pos[0]];
+        val ^= B[pos[1]];
+        val ^= B[pos[2]];
+        B[entry.selected_position] = val & BitMask(fingerprint_bits);
       }
 
       AppendPackedValues(B, fingerprint_bits, &filter_data);
@@ -389,6 +404,24 @@ class XorFilterBitsReader : public BuiltinFilterBitsReader {
 
   bool HashMayMatch(const uint64_t h) override {
     if (payload_size_ == 0) return true;
+
+    if (block_length_ == 0) {
+      // Bloom fallback
+      uint32_t bit_count = seed_;
+      uint32_t probes = fingerprint_bits_;
+      if (bit_count == 0 || probes == 0) return true;
+      uint32_t h32 = static_cast<uint32_t>(h);
+      const uint32_t delta = (h32 >> 17) | (h32 << 15);
+      const char* array = filter_.data();
+      for (uint32_t j = 0; j < probes; j++) {
+        const uint32_t bit_pos = h32 % bit_count;
+        if ((static_cast<uint8_t>(array[bit_pos / 8]) & (1u << (bit_pos % 8))) == 0) {
+          return false;
+        }
+        h32 += delta;
+      }
+      return true;
+    }
 
     uint64_t mixed = MixHash(h, seed_);
     uint32_t pos[3];

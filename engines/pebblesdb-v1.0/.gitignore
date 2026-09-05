@@ -62,6 +62,8 @@
 /libtool
 /ltmain.sh
 /m4/
+!/m4/anal_warnings.m4
+!/m4/ax_check_compile_flag.m4
 /Makefile
 /Makefile.in
 /Makefile.old

@@ -402,6 +402,24 @@ class Benchmark {
         stdout, "FileSize:   %.1f MB (estimated)\n",
         (((kKeySize + FLAGS_value_size * FLAGS_compression_ratio) * num_) /
          1048576.0));
+    const FilterPolicy* filter_policy = filter_policy_;
+    if (filter_policy != nullptr) {
+      std::fprintf(stdout, "Filter:     %s\n", filter_policy->Name());
+      if (FLAGS_use_ribbon_filter) {
+        std::fprintf(stdout, "FilterMode: Ribbon\n");
+        std::fprintf(stdout, "FilterBits: %d Bloom-equivalent bits/key\n",
+                     FLAGS_bloom_bits);
+      } else if (FLAGS_use_xor_filter) {
+        std::fprintf(stdout, "FilterMode: Xor\n");
+        std::fprintf(stdout, "FilterBits: %d precision target\n",
+                     FLAGS_bloom_bits);
+      } else {
+        std::fprintf(stdout, "FilterMode: Bloom\n");
+        std::fprintf(stdout, "FilterBits: %d bits/key\n", FLAGS_bloom_bits);
+      }
+    } else {
+      std::fprintf(stdout, "Filter:     none\n");
+    }
     PrintWarnings();
     std::fprintf(stdout, "------------------------------------------------\n");
   }
@@ -1086,6 +1104,13 @@ int main(int argc, char** argv) {
       std::fprintf(stderr, "Invalid flag '%s'\n", argv[i]);
       std::exit(1);
     }
+  }
+
+  if (FLAGS_use_ribbon_filter && FLAGS_use_xor_filter) {
+    std::fprintf(stderr,
+                 "Invalid filter flags: specify at most "
+                 "one of --use_ribbon_filter=1 or --use_xor_filter=1.\n");
+    std::exit(1);
   }
 
   leveldb::g_env = leveldb::Env::Default();

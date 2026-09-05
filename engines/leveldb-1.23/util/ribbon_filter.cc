@@ -2,415 +2,650 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// Ribbon Filter implementation for LevelDB 1.23.
+// Packed Ribbon Filter implementation for LevelDB.
 //
-// Algorithm based on:
+// Algorithmic basis:
 //   "Ribbon filter: practically smaller than Bloom and Xor"
-//   Peter C. Dillinger and Stefan Walzer, 2021 (arXiv:2103.02515)
+//   Peter C. Dillinger and Stefan Walzer, 2021.
 //
-// Reference implementation: FastFilter/fastfilter_cpp
+// This implementation is independent from RocksDB. It adapts a 64-bit Ribbon
+// construction to LevelDB's FilterPolicy interface and uses a compact,
+// versioned serialized format.
 //
-// This is a standalone implementation adapted to LevelDB's FilterPolicy
-// interface. It does NOT depend on RocksDB code.
+// Important behavior:
+//   * The public precision parameter is Bloom-equivalent bits per key.
+//   * Ribbon solution values are bit-packed instead of byte-aligned.
+//   * Very small/non-beneficial filters use an internal Bloom fallback.
+//   * Failed Ribbon construction also falls back to Bloom.
+//   * Corrupt or unknown encodings conservatively return "may match".
 
 #include "util/ribbon_filter.h"
 
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
-#include <cstring>
+#include <string>
 #include <vector>
 
 #include "leveldb/slice.h"
 #include "util/hash.h"
 
 namespace leveldb {
-
 namespace {
 
-// ============================================================
-// Constants
-// ============================================================
+// -----------------------------------------------------------------------------
+// Ribbon parameters
+// -----------------------------------------------------------------------------
 
-// Width of the coefficient row (the "ribbon"). Each input key produces
-// a coefficient row of this many bits, placed at a start position in
-// the matrix. 64 bits matches uint64_t and provides good performance.
-static constexpr int kRibbonWidth = 64;
+static const uint32_t kRibbonWidth = 64;
 
-// Overhead factor: num_slots = ceil(n * kOverheadNumerator / kOverheadDenominator)
-// A 5% overhead provides a high probability of successful construction.
-static constexpr int kOverheadNumerator = 105;
-static constexpr int kOverheadDenominator = 100;
+// Approximately 5% more slots than equations.
+static const uint32_t kOverheadNumerator = 105;
+static const uint32_t kOverheadDenominator = 100;
 
-// Maximum number of seed attempts before falling back.
-static constexpr int kMaxSeedTries = 64;
+static const uint32_t kMaxSeedTries = 64;
 
-// ============================================================
-// Portable count-trailing-zeros for uint64_t
-// ============================================================
+// Explicit 32-bit constants. These avoid silent truncation of 64-bit literals
+// when passed to LevelDB's 32-bit Hash seed.
+static const uint32_t kSecondHashDelta = 0x7F4A7C15u;
+static const uint32_t kCoefficientSeedDelta = 0x12345678u;
 
-static inline int CountTrailingZeros64(uint64_t x) {
-  assert(x != 0);
+// -----------------------------------------------------------------------------
+// Serialized format
+// -----------------------------------------------------------------------------
+//
+// [payload]
+// [seed:        4 bytes little-endian]
+// [slot_count:  4 bytes little-endian]
+// [aux:         1 byte]
+// [type:        1 byte]
+// [version:     1 byte]
+// [magic:       1 byte]
+//
+// For Ribbon:
+//   slot_count = number of solution slots
+//   aux        = result bits per slot
+//
+// For Bloom fallback:
+//   slot_count = total Bloom bits
+//   aux        = number of probes
+
+static const size_t kTrailerSize = 12;
+static const uint8_t kFormatMagic = 0xB7;
+static const uint8_t kFormatVersion = 1;
+
+enum FilterEncodingType {
+  kEncodingEmpty = 0,
+  kEncodingRibbon = 1,
+  kEncodingBloom = 2,
+  kEncodingAlwaysMatch = 3
+};
+
+// -----------------------------------------------------------------------------
+// General helpers
+// -----------------------------------------------------------------------------
+
+static inline int CountTrailingZeros64(uint64_t value) {
+  assert(value != 0);
 #if defined(__GNUC__) || defined(__clang__)
-  return __builtin_ctzll(x);
-#elif defined(_MSC_VER)
-  unsigned long index;
-#if defined(_WIN64)
-  _BitScanForward64(&index, x);
+  return __builtin_ctzll(value);
 #else
-  // 32-bit MSVC fallback
-  if (static_cast<uint32_t>(x) != 0) {
-    _BitScanForward(&index, static_cast<uint32_t>(x));
-  } else {
-    _BitScanForward(&index, static_cast<uint32_t>(x >> 32));
-    index += 32;
-  }
-#endif
-  return static_cast<int>(index);
-#else
-  // Generic fallback
   int count = 0;
-  while ((x & 1) == 0) {
-    x >>= 1;
-    count++;
+  while ((value & 1u) == 0) {
+    value >>= 1;
+    ++count;
   }
   return count;
 #endif
 }
 
-// ============================================================
-// Hashing
-// ============================================================
-
-// Produce a 64-bit hash from a key and a seed by combining two
-// independent 32-bit hashes from LevelDB's built-in Hash function.
-static uint64_t RibbonHash64(const char* data, size_t n, uint32_t seed) {
-  uint32_t h1 = Hash(data, n, seed);
-  uint32_t h2 = Hash(data, n, seed + 0x9E3779B97F4A7C15ULL);
-  return (static_cast<uint64_t>(h1) << 32) | h2;
+static void AppendFixed32(std::string* dst, uint32_t value) {
+  dst->push_back(static_cast<char>(value & 0xffu));
+  dst->push_back(static_cast<char>((value >> 8) & 0xffu));
+  dst->push_back(static_cast<char>((value >> 16) & 0xffu));
+  dst->push_back(static_cast<char>((value >> 24) & 0xffu));
 }
 
-// Map a 32-bit hash value uniformly to [0, range) using multiplication.
+static uint32_t DecodeFixed32(const char* data) {
+  return static_cast<uint32_t>(static_cast<uint8_t>(data[0])) |
+         (static_cast<uint32_t>(static_cast<uint8_t>(data[1])) << 8) |
+         (static_cast<uint32_t>(static_cast<uint8_t>(data[2])) << 16) |
+         (static_cast<uint32_t>(static_cast<uint8_t>(data[3])) << 24);
+}
+
+static void AppendTrailer(std::string* dst,
+                          uint32_t seed,
+                          uint32_t slot_count,
+                          uint8_t aux,
+                          uint8_t type) {
+  AppendFixed32(dst, seed);
+  AppendFixed32(dst, slot_count);
+  dst->push_back(static_cast<char>(aux));
+  dst->push_back(static_cast<char>(type));
+  dst->push_back(static_cast<char>(kFormatVersion));
+  dst->push_back(static_cast<char>(kFormatMagic));
+}
+
+static uint32_t BitMask(int bits) {
+  assert(bits >= 1 && bits <= 16);
+  return (1u << bits) - 1u;
+}
+
+static size_t PackedByteSize(uint32_t value_count, int bits_per_value) {
+  const uint64_t total_bits =
+      static_cast<uint64_t>(value_count) *
+      static_cast<uint64_t>(bits_per_value);
+  return static_cast<size_t>((total_bits + 7u) / 8u);
+}
+
+static void AppendPackedValues(const std::vector<uint32_t>& values,
+                               int bits_per_value,
+                               std::string* dst) {
+  const uint32_t mask = BitMask(bits_per_value);
+  uint64_t pending = 0;
+  int pending_bits = 0;
+
+  for (size_t i = 0; i < values.size(); ++i) {
+    pending |= static_cast<uint64_t>(values[i] & mask) << pending_bits;
+    pending_bits += bits_per_value;
+
+    while (pending_bits >= 8) {
+      dst->push_back(static_cast<char>(pending & 0xffu));
+      pending >>= 8;
+      pending_bits -= 8;
+    }
+  }
+
+  if (pending_bits > 0) {
+    dst->push_back(static_cast<char>(pending & 0xffu));
+  }
+}
+
+static bool ReadPackedValue(const char* payload,
+                            size_t payload_size,
+                            uint32_t index,
+                            int bits_per_value,
+                            uint32_t* value) {
+  const uint64_t bit_offset =
+      static_cast<uint64_t>(index) *
+      static_cast<uint64_t>(bits_per_value);
+  const size_t byte_offset = static_cast<size_t>(bit_offset / 8u);
+  const int shift = static_cast<int>(bit_offset % 8u);
+  const int bytes_needed = (shift + bits_per_value + 7) / 8;
+
+  if (byte_offset + static_cast<size_t>(bytes_needed) > payload_size) {
+    return false;
+  }
+
+  uint64_t word = 0;
+  for (int i = 0; i < bytes_needed; ++i) {
+    word |= static_cast<uint64_t>(
+                static_cast<uint8_t>(payload[byte_offset + i]))
+            << (8 * i);
+  }
+
+  *value = static_cast<uint32_t>((word >> shift) & BitMask(bits_per_value));
+  return true;
+}
+
+// -----------------------------------------------------------------------------
+// Hash derivation
+// -----------------------------------------------------------------------------
+
+static uint64_t RibbonHash64(const char* data,
+                             size_t size,
+                             uint32_t seed) {
+  const uint32_t high = Hash(data, size, seed);
+  const uint32_t low = Hash(data, size, seed + kSecondHashDelta);
+  return (static_cast<uint64_t>(high) << 32) | low;
+}
+
 static uint32_t FastRange32(uint32_t hash, uint32_t range) {
+  if (range == 0) {
+    return 0;
+  }
+
   return static_cast<uint32_t>(
       (static_cast<uint64_t>(hash) * static_cast<uint64_t>(range)) >> 32);
 }
 
-// ============================================================
-// Key derivation from hash
-// ============================================================
-
-// Derive the start position (row index) from a hash value.
-static uint32_t DeriveStart(uint64_t h1, uint32_t num_starts) {
-  return FastRange32(static_cast<uint32_t>(h1 >> 32), num_starts);
+static uint32_t DeriveStart(uint64_t hash, uint32_t start_count) {
+  return FastRange32(static_cast<uint32_t>(hash >> 32), start_count);
 }
 
-// Derive the coefficient row from a second hash value.
-// The lowest bit is always set to ensure the coefficient row has a
-// leading coefficient at the start position.
-static uint64_t DeriveCoeffRow(uint64_t h2) {
-  return h2 | 1;
+static uint64_t DeriveCoefficient(uint64_t hash) {
+  // Bit zero is always a coefficient, so the row has a pivot candidate at
+  // its initial position.
+  return hash | 1u;
 }
 
-// Derive the result value from a hash value.
-// Uses the lower bits of h1 (independent from the upper bits used for start).
-static uint32_t DeriveResult(uint64_t h1, int result_bits) {
-  return static_cast<uint32_t>(h1) & ((1u << result_bits) - 1);
+static uint32_t DeriveResult(uint64_t hash, int result_bits) {
+  return static_cast<uint32_t>(hash) & BitMask(result_bits);
 }
 
-// ============================================================
-// Ribbon Filter Policy implementation
-// ============================================================
+// -----------------------------------------------------------------------------
+// Internal Bloom fallback
+// -----------------------------------------------------------------------------
+
+static uint32_t BloomProbeCount(int bits_per_key) {
+  uint32_t probes = static_cast<uint32_t>(bits_per_key * 0.69);
+  if (probes < 1) {
+    probes = 1;
+  }
+  if (probes > 30) {
+    probes = 30;
+  }
+  return probes;
+}
+
+static uint32_t BloomBitCount(int key_count, int bits_per_key) {
+  uint64_t bits = static_cast<uint64_t>(key_count) *
+                  static_cast<uint64_t>(bits_per_key);
+
+  if (bits < 64) {
+    bits = 64;
+  }
+
+  bits = (bits + 7u) & ~static_cast<uint64_t>(7u);
+
+  if (bits > 0xffffffffu) {
+    return 0;
+  }
+
+  return static_cast<uint32_t>(bits);
+}
+
+static size_t EstimatedBloomSerializedSize(int key_count,
+                                           int bits_per_key) {
+  const uint32_t bit_count = BloomBitCount(key_count, bits_per_key);
+  if (bit_count == 0) {
+    return static_cast<size_t>(-1);
+  }
+  return static_cast<size_t>(bit_count / 8u) + kTrailerSize;
+}
+
+static void BuildBloomEncoding(const Slice* keys,
+                               int key_count,
+                               int bits_per_key,
+                               std::string* encoded) {
+  const uint32_t bit_count = BloomBitCount(key_count, bits_per_key);
+
+  if (bit_count == 0) {
+    AppendTrailer(encoded, 0, 0, 0, kEncodingAlwaysMatch);
+    return;
+  }
+
+  const uint32_t probes = BloomProbeCount(bits_per_key);
+  const size_t byte_count = bit_count / 8u;
+  const size_t payload_offset = encoded->size();
+
+  encoded->append(byte_count, static_cast<char>(0));
+
+  for (int i = 0; i < key_count; ++i) {
+    uint32_t hash = Hash(keys[i].data(), keys[i].size(), 0xbc9f1d34u);
+    const uint32_t delta = (hash >> 17) | (hash << 15);
+
+    for (uint32_t probe = 0; probe < probes; ++probe) {
+      const uint32_t bit_position = hash % bit_count;
+      (*encoded)[payload_offset + bit_position / 8u] |=
+          static_cast<char>(1u << (bit_position % 8u));
+      hash += delta;
+    }
+  }
+
+  AppendTrailer(encoded,
+                0,
+                bit_count,
+                static_cast<uint8_t>(probes),
+                kEncodingBloom);
+}
+
+static bool BloomMayMatch(const Slice& key,
+                          const char* payload,
+                          size_t payload_size,
+                          uint32_t bit_count,
+                          uint8_t probes) {
+  if (bit_count < 64 || probes < 1 || probes > 30 ||
+      payload_size != static_cast<size_t>((bit_count + 7u) / 8u)) {
+    return true;
+  }
+
+  uint32_t hash = Hash(key.data(), key.size(), 0xbc9f1d34u);
+  const uint32_t delta = (hash >> 17) | (hash << 15);
+
+  for (uint32_t probe = 0; probe < probes; ++probe) {
+    const uint32_t bit_position = hash % bit_count;
+    if ((static_cast<uint8_t>(payload[bit_position / 8u]) &
+         (1u << (bit_position % 8u))) == 0) {
+      return false;
+    }
+    hash += delta;
+  }
+
+  return true;
+}
+
+// -----------------------------------------------------------------------------
+// Ribbon construction
+// -----------------------------------------------------------------------------
+
+struct RibbonRow {
+  uint32_t start;
+  uint64_t coefficients;
+  uint32_t result;
+};
+
+struct RibbonRowStartLess {
+  bool operator()(const RibbonRow& left, const RibbonRow& right) const {
+    return left.start < right.start;
+  }
+};
+
+static uint32_t RibbonSlotCount(int key_count) {
+  if (key_count <= 0) {
+    return 0;
+  }
+
+  uint64_t slot_count;
+  if (key_count < static_cast<int>(kRibbonWidth)) {
+    slot_count = kRibbonWidth + static_cast<uint32_t>(key_count);
+  } else {
+    slot_count =
+        (static_cast<uint64_t>(key_count) * kOverheadNumerator +
+         kOverheadDenominator - 1u) /
+        kOverheadDenominator;
+  }
+
+  if (slot_count < kRibbonWidth) {
+    slot_count = kRibbonWidth;
+  }
+
+  if (slot_count > 0xffffffffu) {
+    return 0;
+  }
+
+  return static_cast<uint32_t>(slot_count);
+}
+
+static bool TryBuildRibbon(const Slice* keys,
+                           int key_count,
+                           uint32_t slot_count,
+                           int result_bits,
+                           uint32_t seed,
+                           std::string* encoded) {
+  if (slot_count < kRibbonWidth) {
+    return false;
+  }
+
+  const uint32_t start_count = slot_count - kRibbonWidth + 1u;
+  std::vector<RibbonRow> rows(static_cast<size_t>(key_count));
+
+  for (int i = 0; i < key_count; ++i) {
+    const uint64_t result_hash =
+        RibbonHash64(keys[i].data(), keys[i].size(), seed);
+    const uint64_t coefficient_hash = RibbonHash64(
+        keys[i].data(), keys[i].size(), seed + kCoefficientSeedDelta);
+
+    rows[i].start = DeriveStart(result_hash, start_count);
+    rows[i].coefficients = DeriveCoefficient(coefficient_hash);
+    rows[i].result = DeriveResult(result_hash, result_bits);
+  }
+
+  std::sort(rows.begin(), rows.end(), RibbonRowStartLess());
+
+  std::vector<uint64_t> pivots(slot_count, 0);
+  std::vector<uint32_t> pivot_results(slot_count, 0);
+
+  for (int i = 0; i < key_count; ++i) {
+    uint64_t coefficients = rows[i].coefficients;
+    uint32_t result = rows[i].result;
+    uint32_t position = rows[i].start;
+
+    while (coefficients != 0) {
+      const int leading_zeroes = CountTrailingZeros64(coefficients);
+      position += static_cast<uint32_t>(leading_zeroes);
+      coefficients >>= leading_zeroes;
+
+      if (position >= slot_count) {
+        if (result != 0) {
+          return false;
+        }
+        coefficients = 0;
+        break;
+      }
+
+      if (pivots[position] == 0) {
+        pivots[position] = coefficients;
+        pivot_results[position] = result;
+        coefficients = 0;
+        result = 0;
+        break;
+      }
+
+      coefficients ^= pivots[position];
+      result ^= pivot_results[position];
+    }
+
+    if (coefficients == 0 && result != 0) {
+      return false;
+    }
+  }
+
+  std::vector<uint32_t> solution(slot_count, 0);
+
+  for (int position = static_cast<int>(slot_count) - 1;
+       position >= 0;
+       --position) {
+    if (pivots[position] == 0) {
+      continue;
+    }
+
+    uint32_t value = pivot_results[position];
+    uint64_t remaining = pivots[position] >> 1;
+    int relative = 1;
+
+    while (remaining != 0 &&
+           position + relative < static_cast<int>(slot_count)) {
+      if ((remaining & 1u) != 0) {
+        value ^= solution[position + relative];
+      }
+      remaining >>= 1;
+      ++relative;
+    }
+
+    solution[position] = value & BitMask(result_bits);
+  }
+
+  AppendPackedValues(solution, result_bits, encoded);
+  AppendTrailer(encoded,
+                seed,
+                slot_count,
+                static_cast<uint8_t>(result_bits),
+                kEncodingRibbon);
+  return true;
+}
+
+// -----------------------------------------------------------------------------
+// FilterPolicy
+// -----------------------------------------------------------------------------
 
 class RibbonFilterPolicy : public FilterPolicy {
  public:
-  explicit RibbonFilterPolicy(int bits_per_key)
-      : bits_per_key_(bits_per_key) {
-    // Compute the number of result bits needed to match a Bloom filter's
-    // false positive rate with the given bits_per_key.
-    //
-    // For a Bloom filter with optimal k:
-    //   FPR ≈ (1 - e^(-k*n/m))^k ≈ 0.6185^(bits_per_key)
-    //
-    // For a Ribbon filter:
-    //   FPR = 2^(-result_bits)
-    //
-    // Matching: result_bits = ceil(bits_per_key * ln(2))
-    //                       = ceil(bits_per_key * 0.6931)
-    //
-    // For bits_per_key=10: result_bits = ceil(6.931) = 7
-    // This gives FPR = 2^(-7) ≈ 0.78%, comparable to Bloom's ~0.82%.
-    result_bits_ = static_cast<int>(std::ceil(bits_per_key * 0.6931));
-    if (result_bits_ < 1) result_bits_ = 1;
-    if (result_bits_ > 16) result_bits_ = 16;
-  }
+  explicit RibbonFilterPolicy(int bloom_equivalent_bits_per_key)
+      : bits_per_key_(bloom_equivalent_bits_per_key),
+        result_bits_(ComputeResultBits(bloom_equivalent_bits_per_key)) {}
 
   const char* Name() const override {
-    return "leveldb.RibbonFilter";
+    // Change this name whenever the serialized representation changes.
+    return "proyecto-soa.RibbonFilter64Packed.v1";
   }
 
-  void CreateFilter(const Slice* keys, int n, std::string* dst) const override {
-    if (n <= 0) {
-      // Empty filter: store just the metadata marker
-      PushMetadata(dst, 0, 0);
+  void CreateFilter(const Slice* keys,
+                    int key_count,
+                    std::string* dst) const override {
+    if (key_count <= 0) {
+      std::string encoded;
+      AppendTrailer(&encoded, 0, 0, 0, kEncodingEmpty);
+      dst->append(encoded);
       return;
     }
 
-    // Handle very small filters: use at least kRibbonWidth slots
-    uint32_t num_slots;
-    if (n < kRibbonWidth) {
-      num_slots = static_cast<uint32_t>(kRibbonWidth + n);
-    } else {
-      num_slots = static_cast<uint32_t>(
-          (static_cast<uint64_t>(n) * kOverheadNumerator) /
-          kOverheadDenominator) + 1;
+    const uint32_t slot_count = RibbonSlotCount(key_count);
+
+    if (slot_count == 0) {
+      std::string encoded;
+      BuildBloomEncoding(keys, key_count, bits_per_key_, &encoded);
+      dst->append(encoded);
+      return;
     }
 
-    uint32_t num_starts = num_slots - kRibbonWidth + 1;
+    const size_t ribbon_size =
+        PackedByteSize(slot_count, result_bits_) + kTrailerSize;
+    const size_t bloom_size =
+        EstimatedBloomSerializedSize(key_count, bits_per_key_);
 
-    // Try banding with different seeds
-    for (uint32_t seed = 0; seed < kMaxSeedTries; seed++) {
-      if (TryBuildFilter(keys, n, num_slots, num_starts, seed, dst)) {
-        return;  // Success
+    // A 64-position band has a fixed minimum cost. For small sets, Bloom is
+    // more compact and avoids wasting construction CPU.
+    if (ribbon_size >= bloom_size) {
+      std::string encoded;
+      BuildBloomEncoding(keys, key_count, bits_per_key_, &encoded);
+      dst->append(encoded);
+      return;
+    }
+
+    for (uint32_t seed = 0; seed < kMaxSeedTries; ++seed) {
+      std::string encoded;
+      if (TryBuildRibbon(keys,
+                         key_count,
+                         slot_count,
+                         result_bits_,
+                         seed,
+                         &encoded)) {
+        dst->append(encoded);
+        return;
       }
     }
 
-    // All seeds failed (extremely unlikely). Fall back to an "always match"
-    // filter. This is safe: it just means more false positives.
-    PushMetadata(dst, 0, 0);
+    // Safe fallback: Bloom preserves zero false negatives and remains useful,
+    // unlike an always-match marker.
+    std::string encoded;
+    BuildBloomEncoding(keys, key_count, bits_per_key_, &encoded);
+    dst->append(encoded);
   }
 
   bool KeyMayMatch(const Slice& key, const Slice& filter) const override {
-    const size_t len = filter.size();
-
-    // Minimum filter size: 5 bytes of metadata
-    if (len < 5) return true;  // No filter data, assume match
+    if (filter.size() < kTrailerSize) {
+      return true;
+    }
 
     const char* data = filter.data();
+    const size_t trailer_offset = filter.size() - kTrailerSize;
+    const char* trailer = data + trailer_offset;
 
-    // Read metadata from the end of the filter
-    uint8_t stored_result_bits = static_cast<uint8_t>(data[len - 1]);
-    uint32_t stored_seed = DecodeFixed32(data + len - 5);
+    const uint32_t seed = DecodeFixed32(trailer);
+    const uint32_t slot_count = DecodeFixed32(trailer + 4);
+    const uint8_t aux = static_cast<uint8_t>(trailer[8]);
+    const uint8_t type = static_cast<uint8_t>(trailer[9]);
+    const uint8_t version = static_cast<uint8_t>(trailer[10]);
+    const uint8_t magic = static_cast<uint8_t>(trailer[11]);
 
-    if (stored_result_bits == 0) {
-      return true;  // Empty/fallback filter, always match
+    if (magic != kFormatMagic || version != kFormatVersion) {
+      return true;
     }
 
-    // Compute number of slots from the solution data size
-    size_t solution_size = len - 5;  // subtract metadata bytes
-    uint32_t bytes_per_slot = (stored_result_bits <= 8) ? 1 : 2;
-    uint32_t num_slots = static_cast<uint32_t>(solution_size / bytes_per_slot);
+    const char* payload = data;
+    const size_t payload_size = trailer_offset;
 
-    if (num_slots < static_cast<uint32_t>(kRibbonWidth)) {
-      return true;  // Filter too small, assume match
+    if (type == kEncodingEmpty) {
+      return payload_size == 0 ? false : true;
     }
 
-    uint32_t num_starts = num_slots - kRibbonWidth + 1;
+    if (type == kEncodingAlwaysMatch) {
+      return true;
+    }
 
-    // Hash the key
-    uint64_t h1 = RibbonHash64(key.data(), key.size(), stored_seed);
-    uint64_t h2 = RibbonHash64(key.data(), key.size(),
-                                 stored_seed + 0x12345678);
+    if (type == kEncodingBloom) {
+      return BloomMayMatch(key, payload, payload_size, slot_count, aux);
+    }
 
-    uint32_t start = DeriveStart(h1, num_starts);
-    uint64_t coeff = DeriveCoeffRow(h2);
-    uint32_t expected_result = DeriveResult(h1, stored_result_bits);
+    if (type != kEncodingRibbon) {
+      return true;
+    }
 
-    // Compute actual result: XOR of solution values where coefficient
-    // bits are set.
-    uint32_t actual_result = 0;
-    uint64_t c = coeff;
-    uint32_t pos = start;
+    const int result_bits = static_cast<int>(aux);
+    if (result_bits < 1 || result_bits > 16 ||
+        slot_count < kRibbonWidth ||
+        payload_size != PackedByteSize(slot_count, result_bits)) {
+      return true;
+    }
 
-    while (c != 0) {
-      int bit = CountTrailingZeros64(c);
-      pos += bit;
-      c >>= bit;
+    const uint32_t start_count = slot_count - kRibbonWidth + 1u;
+    const uint64_t result_hash =
+        RibbonHash64(key.data(), key.size(), seed);
+    const uint64_t coefficient_hash = RibbonHash64(
+        key.data(), key.size(), seed + kCoefficientSeedDelta);
 
-      if (pos >= num_slots) break;
+    uint32_t position = DeriveStart(result_hash, start_count);
+    uint64_t coefficients = DeriveCoefficient(coefficient_hash);
+    const uint32_t expected = DeriveResult(result_hash, result_bits);
+    uint32_t actual = 0;
 
-      if (bytes_per_slot == 1) {
-        actual_result ^= static_cast<uint8_t>(data[pos]);
-      } else {
-        actual_result ^= static_cast<uint8_t>(data[pos * 2]) |
-                         (static_cast<uint32_t>(
-                              static_cast<uint8_t>(data[pos * 2 + 1])) << 8);
+    while (coefficients != 0) {
+      const int leading_zeroes = CountTrailingZeros64(coefficients);
+      position += static_cast<uint32_t>(leading_zeroes);
+      coefficients >>= leading_zeroes;
+
+      if (position >= slot_count) {
+        return true;
       }
 
-      c >>= 1;
-      pos += 1;
+      uint32_t value = 0;
+      if (!ReadPackedValue(payload,
+                           payload_size,
+                           position,
+                           result_bits,
+                           &value)) {
+        return true;
+      }
+
+      actual ^= value;
+      coefficients >>= 1;
+      ++position;
     }
 
-    return (actual_result & ((1u << stored_result_bits) - 1)) ==
-           expected_result;
+    return (actual & BitMask(result_bits)) == expected;
   }
 
  private:
-  int bits_per_key_;
-  int result_bits_;
+  static int ComputeResultBits(int bloom_equivalent_bits_per_key) {
+    int result_bits = static_cast<int>(std::ceil(
+        bloom_equivalent_bits_per_key * 0.6931471805599453));
 
-  // --------------------------------------------------------
-  // Serialization helpers
-  // --------------------------------------------------------
-
-  // Encode a 32-bit value in little-endian.
-  static void EncodeFixed32(char* buf, uint32_t value) {
-    buf[0] = static_cast<char>(value & 0xff);
-    buf[1] = static_cast<char>((value >> 8) & 0xff);
-    buf[2] = static_cast<char>((value >> 16) & 0xff);
-    buf[3] = static_cast<char>((value >> 24) & 0xff);
-  }
-
-  // Decode a 32-bit value from little-endian.
-  static uint32_t DecodeFixed32(const char* buf) {
-    return (static_cast<uint32_t>(static_cast<uint8_t>(buf[0]))) |
-           (static_cast<uint32_t>(static_cast<uint8_t>(buf[1])) << 8) |
-           (static_cast<uint32_t>(static_cast<uint8_t>(buf[2])) << 16) |
-           (static_cast<uint32_t>(static_cast<uint8_t>(buf[3])) << 24);
-  }
-
-  // Append metadata to the filter.
-  // Format: [4 bytes: seed, little-endian] [1 byte: result_bits]
-  static void PushMetadata(std::string* dst, uint32_t seed,
-                           uint8_t result_bits) {
-    char buf[4];
-    EncodeFixed32(buf, seed);
-    dst->append(buf, 4);
-    dst->push_back(static_cast<char>(result_bits));
-  }
-
-  // --------------------------------------------------------
-  // Core Ribbon construction
-  // --------------------------------------------------------
-
-  // Try to build a filter with the given seed. Returns true on success
-  // (filter data appended to dst), false on banding failure.
-  bool TryBuildFilter(const Slice* keys, int n, uint32_t num_slots,
-                      uint32_t num_starts, uint32_t seed,
-                      std::string* dst) const {
-    // Phase 1: Hash all keys and derive (start, coeff, result) triples.
-    struct Row {
-      uint32_t start;
-      uint64_t coeff;
-      uint32_t result;
-    };
-
-    std::vector<Row> rows(n);
-    for (int i = 0; i < n; i++) {
-      uint64_t h1 = RibbonHash64(keys[i].data(), keys[i].size(), seed);
-      uint64_t h2 = RibbonHash64(keys[i].data(), keys[i].size(),
-                                   seed + 0x12345678);
-      rows[i].start = DeriveStart(h1, num_starts);
-      rows[i].coeff = DeriveCoeffRow(h2);
-      rows[i].result = DeriveResult(h1, result_bits_);
+    if (result_bits < 1) {
+      result_bits = 1;
+    }
+    if (result_bits > 16) {
+      result_bits = 16;
     }
 
-    // Sort by start position for better cache locality during banding.
-    std::sort(rows.begin(), rows.end(),
-              [](const Row& a, const Row& b) { return a.start < b.start; });
-
-    // Phase 2: Banding (incremental Gaussian elimination).
-    //
-    // We maintain a partially reduced upper-triangular matrix.
-    // pivots[col] stores the coefficient row for the pivot at column col.
-    // pivot_results[col] stores the corresponding result value.
-    // If pivots[col] == 0, column col is free (no pivot).
-
-    std::vector<uint64_t> pivots(num_slots, 0);
-    std::vector<uint32_t> pivot_results(num_slots, 0);
-
-    for (int i = 0; i < n; i++) {
-      uint64_t c = rows[i].coeff;
-      uint32_t r = rows[i].result;
-      uint32_t s = rows[i].start;
-
-      while (c != 0) {
-        int lsb = CountTrailingZeros64(c);
-        s += lsb;
-        c >>= lsb;
-
-        if (s >= num_slots) {
-          // Row extends beyond the matrix. If result is non-zero,
-          // construction fails.
-          if (r != 0) return false;
-          c = 0;
-          break;
-        }
-
-        if (pivots[s] == 0) {
-          // Free column: place this row as a pivot.
-          pivots[s] = c;
-          pivot_results[s] = r;
-          break;
-        }
-
-        // Column occupied: eliminate by XOR-ing with existing pivot.
-        c ^= pivots[s];
-        r ^= pivot_results[s];
-      }
-
-      if (c == 0 && r != 0) {
-        // Row was fully eliminated but result is non-zero: contradiction.
-        return false;
-      }
-    }
-
-    // Phase 3: Back-substitution.
-    //
-    // Solve for the solution vector from the upper-triangular system.
-    // For each column with a pivot, compute:
-    //   solution[col] = pivot_result[col] XOR (sum of solution[col+j]
-    //                   for each set bit j > 0 in pivots[col])
-
-    std::vector<uint32_t> solution(num_slots, 0);
-
-    for (int col = static_cast<int>(num_slots) - 1; col >= 0; col--) {
-      if (pivots[col] == 0) {
-        solution[col] = 0;  // Free variable, set to 0
-        continue;
-      }
-
-      uint32_t val = pivot_results[col];
-      uint64_t c = pivots[col] >> 1;  // Skip the pivot bit itself (bit 0)
-      int j = 1;
-      while (c != 0 && (col + j) < static_cast<int>(num_slots)) {
-        if (c & 1) {
-          val ^= solution[col + j];
-        }
-        c >>= 1;
-        j++;
-      }
-      solution[col] = val;
-    }
-
-    // Phase 4: Serialize the solution.
-    //
-    // Format: [solution_data...][seed (4 bytes LE)][result_bits (1 byte)]
-    //
-    // Solution data: one byte per slot if result_bits <= 8,
-    //                two bytes per slot if 9 <= result_bits <= 16.
-
-    if (result_bits_ <= 8) {
-      for (uint32_t i = 0; i < num_slots; i++) {
-        dst->push_back(static_cast<char>(solution[i] & 0xFF));
-      }
-    } else {
-      for (uint32_t i = 0; i < num_slots; i++) {
-        dst->push_back(static_cast<char>(solution[i] & 0xFF));
-        dst->push_back(static_cast<char>((solution[i] >> 8) & 0xFF));
-      }
-    }
-
-    PushMetadata(dst, seed, static_cast<uint8_t>(result_bits_));
-    return true;
+    return result_bits;
   }
+
+  const int bits_per_key_;
+  const int result_bits_;
 };
 
 }  // namespace
 
-const FilterPolicy* NewRibbonFilterPolicy(int bits_per_key) {
-  return new RibbonFilterPolicy(bits_per_key);
+const FilterPolicy* NewRibbonFilterPolicy(
+    int bloom_equivalent_bits_per_key) {
+  if (bloom_equivalent_bits_per_key <= 0) {
+    return nullptr;
+  }
+
+  return new RibbonFilterPolicy(bloom_equivalent_bits_per_key);
 }
 
 }  // namespace leveldb
